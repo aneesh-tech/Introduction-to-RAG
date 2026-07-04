@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RAG Systems Handbook — Modules 1-3</title>
+<style>
+  body {
+    margin:0;
+    background:#F6F3EC;
+    font-family: 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+  }
+  .module-block {
+    width:100%;
+  }
+  .module-frame {
+    display:block;
+    width:100%;
+    border:none;
+    overflow:hidden;
+  }
+</style>
+</head>
+<body>
+
+<div class="module-block">
+  <iframe id="mod0" class="module-frame" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;RAG Handbook — Module 1&lt;/title&gt;
+&lt;style&gt;
+  :root{
+    --paper:#F6F3EC;
+    --paper-raised:#FFFFFF;
+    --ink:#1B2430;
+    --ink-soft:#4B5563;
+    --teal:#1F6F64;
+    --teal-soft:#DCEDE9;
+    --amber:#B5651D;
+    --amber-soft:#F3E3D3;
+    --line:#DDD6C8;
+    --code-bg:#1B2430;
+    --code-text:#E7E2D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,Palatino,Georgia,serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 32px 120px;}
+
+  /* ---------- COVER ---------- */
+  .cover{
+    padding:90px 32px 70px;
+    max-width:880px;margin:0 auto;
+    border-bottom:2px solid var(--ink);
+  }
+  .eyebrow{
+    font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:18px;
+  }
+  h1.title{
+    font-family:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,Georgia,serif;
+    font-size:56px;line-height:1.05;margin:0 0 14px;font-weight:700;
+    letter-spacing:-0.5px;
+  }
+  .subtitle{font-size:19px;color:var(--ink-soft);max-width:560px;margin-bottom:34px;font-style:italic;}
+  .meta-row{display:flex;gap:28px;flex-wrap:wrap;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;color:var(--ink-soft);}
+  .meta-row div span{display:block;color:var(--ink);font-size:13px;margin-top:3px;}
+
+  /* ---------- VECTOR MOTIF (signature) ---------- */
+  .vec-motif{margin-top:36px;}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-child{border-bottom:none;}
+  .sec-label{
+    font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;letter-spacing:.14em;
+    color:var(--teal);text-transform:uppercase;margin-bottom:10px;
+  }
+  h2{font-size:30px;margin:0 0 20px;letter-spacing:-.3px;}
+  h3{font-size:20px;margin:30px 0 12px;color:var(--ink);}
+  p{font-size:16.5px;color:var(--ink);margin:0 0 14px;}
+  .lede{font-size:18px;color:var(--ink-soft);max-width:680px;}
+
+  ul.points{margin:0 0 18px;padding-left:0;list-style:none;}
+  ul.points li{
+    position:relative;padding-left:26px;margin-bottom:10px;font-size:16px;
+  }
+  ul.points li::before{
+    content:&quot;→&quot;;position:absolute;left:0;color:var(--teal);font-weight:700;
+  }
+
+  .callout{
+    background:var(--teal-soft);border-left:3px solid var(--teal);
+    padding:16px 20px;border-radius:2px;margin:20px 0;font-size:15.5px;
+  }
+  .callout b{color:var(--teal);}
+
+  .warn{
+    background:var(--amber-soft);border-left:3px solid var(--amber);
+    padding:16px 20px;border-radius:2px;margin:20px 0;font-size:15.5px;
+  }
+  .warn b{color:var(--amber);}
+
+  /* ---------- COMPARISON TABLE ---------- */
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:15px;}
+  th{
+    text-align:left;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:11.5px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
+    padding:10px 14px;border-bottom:2px solid var(--ink);
+  }
+  td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr td:first-child{font-weight:600;white-space:nowrap;}
+
+  /* ---------- CODE ---------- */
+  .code-block{
+    background:var(--code-bg);color:var(--code-text);
+    border-radius:8px;padding:18px 20px;margin:16px 0 26px;
+    overflow-x:auto;font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,Menlo,Consolas,monospace;
+    font-size:13px;line-height:1.65;white-space:pre-wrap;
+  }
+  .code-label{
+    font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--amber);margin:0 0 6px;
+  }
+  .cm{color:#8B94A3;} .kw{color:#7FB7E8;} .st{color:#C6E29B;} .fn{color:#E6B673;}
+
+  /* ---------- STEP LIST ---------- */
+  .step{
+    display:flex;gap:18px;padding:18px 0;border-top:1px solid var(--line);
+  }
+  .step:first-of-type{border-top:none;}
+  .step-num{
+    font-family:&#x27;Iowan Old Style&#x27;,Georgia,serif;font-size:26px;color:var(--teal);
+    min-width:42px;font-weight:700;
+  }
+  .step-body h4{margin:0 0 6px;font-size:17px;}
+  .step-body p{margin:0;font-size:15px;color:var(--ink-soft);}
+
+  /* ---------- GLOSSARY ---------- */
+  .gloss{display:grid;grid-template-columns:180px 1fr;gap:6px 20px;font-size:15px;margin-top:10px;}
+  .gloss dt{font-weight:700;color:var(--teal);padding:10px 0;border-top:1px solid var(--line);}
+  .gloss dd{margin:0;padding:10px 0;border-top:1px solid var(--line);color:var(--ink-soft);}
+
+  .footer-note{
+    font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;color:var(--ink-soft);
+    text-align:center;padding:40px 0 0;
+  }
+
+  svg text{font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,Menlo,monospace;}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div class=&quot;cover&quot;&gt;
+  &lt;div class=&quot;eyebrow&quot;&gt;IBM · RAG SYSTEMS · SKILLS NETWORK&lt;/div&gt;
+  &lt;h1 class=&quot;title&quot;&gt;Retrieval-Augmented&lt;br&gt;Generation&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Module 1 field notes — concepts, architecture, and the LangChain code that wires it together.&lt;/div&gt;
+  &lt;div class=&quot;meta-row&quot;&gt;
+    &lt;div&gt;PIPELINE&lt;span&gt;8 stages&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;CORE IDEA&lt;span&gt;Retrieve → Augment → Generate&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;FRAMEWORK&lt;span&gt;LangChain + watsonx.ai&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;vec-motif&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 820 150&quot; width=&quot;100%&quot; height=&quot;150&quot;&gt;
+      &lt;!-- scattered document vectors --&gt;
+      &lt;g stroke=&quot;#C9C1AE&quot; stroke-width=&quot;1&quot;&gt;
+        &lt;line x1=&quot;120&quot; y1=&quot;40&quot; x2=&quot;410&quot; y2=&quot;75&quot;/&gt;
+        &lt;line x1=&quot;200&quot; y1=&quot;110&quot; x2=&quot;410&quot; y2=&quot;75&quot;/&gt;
+        &lt;line x1=&quot;410&quot; y1=&quot;75&quot; x2=&quot;590&quot; y2=&quot;35&quot;/&gt;
+        &lt;line x1=&quot;410&quot; y1=&quot;75&quot; x2=&quot;640&quot; y2=&quot;105&quot;/&gt;
+        &lt;line x1=&quot;410&quot; y1=&quot;75&quot; x2=&quot;720&quot; y2=&quot;60&quot;/&gt;
+      &lt;/g&gt;
+      &lt;g&gt;
+        &lt;circle cx=&quot;120&quot; cy=&quot;40&quot; r=&quot;5&quot; fill=&quot;#B9AF97&quot;/&gt;
+        &lt;circle cx=&quot;200&quot; cy=&quot;110&quot; r=&quot;5&quot; fill=&quot;#B9AF97&quot;/&gt;
+        &lt;circle cx=&quot;590&quot; cy=&quot;35&quot; r=&quot;5&quot; fill=&quot;#B9AF97&quot;/&gt;
+        &lt;circle cx=&quot;640&quot; cy=&quot;105&quot; r=&quot;5&quot; fill=&quot;#B9AF97&quot;/&gt;
+        &lt;circle cx=&quot;90&quot; cy=&quot;95&quot; r=&quot;5&quot; fill=&quot;#B9AF97&quot;/&gt;
+        &lt;circle cx=&quot;300&quot; cy=&quot;30&quot; r=&quot;5&quot; fill=&quot;#B9AF97&quot;/&gt;
+        &lt;circle cx=&quot;500&quot; cy=&quot;115&quot; r=&quot;5&quot; fill=&quot;#B9AF97&quot;/&gt;
+      &lt;/g&gt;
+      &lt;!-- query vector, highlighted, finding nearest neighbor --&gt;
+      &lt;circle cx=&quot;410&quot; cy=&quot;75&quot; r=&quot;9&quot; fill=&quot;#1F6F64&quot;/&gt;
+      &lt;circle cx=&quot;720&quot; cy=&quot;60&quot; r=&quot;6&quot; fill=&quot;#B5651D&quot;/&gt;
+      &lt;text x=&quot;410&quot; y=&quot;100&quot; fill=&quot;#1F6F64&quot; font-size=&quot;11&quot; text-anchor=&quot;middle&quot;&gt;query&lt;/text&gt;
+      &lt;text x=&quot;720&quot; y=&quot;45&quot; fill=&quot;#B5651D&quot; font-size=&quot;11&quot; text-anchor=&quot;middle&quot;&gt;nearest chunk&lt;/text&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;wrap&quot;&gt;
+
+&lt;!-- ============ WHAT IS RAG ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;01 — Definition&lt;/div&gt;
+  &lt;h2&gt;What is RAG?&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;A technique that pairs an LLM with an external, searchable knowledge store — so the model can pull in facts it was never trained on before it answers.&lt;/p&gt;
+  &lt;ul class=&quot;points&quot;&gt;
+    &lt;li&gt;RAG = &lt;b&gt;Retrieval&lt;/b&gt; (find relevant text) + &lt;b&gt;Generation&lt;/b&gt; (an LLM writes the answer).&lt;/li&gt;
+    &lt;li&gt;Two working parts: a &lt;b&gt;Retriever&lt;/b&gt; that searches a knowledge base, and a &lt;b&gt;Generator&lt;/b&gt; that turns retrieved text into a natural-language answer.&lt;/li&gt;
+    &lt;li&gt;No retraining required — you add new knowledge by adding documents, not by fine-tuning the model.&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class=&quot;callout&quot;&gt;&lt;b&gt;Why it matters:&lt;/b&gt; RAG is what lets a general-purpose LLM answer a question like &quot;what is our mobile policy?&quot; — something it could never know from public training data alone.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ WHY RAG ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;02 — Motivation&lt;/div&gt;
+  &lt;h2&gt;Why RAG? The problem with a bare LLM&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;Without retrieval, a model only has two sources of knowledge: what&#x27;s in the prompt, and what it memorized during training. Both run out.&lt;/p&gt;
+
+  &lt;svg viewBox=&quot;0 0 780 90&quot; width=&quot;100%&quot; height=&quot;90&quot; style=&quot;margin:18px 0;&quot;&gt;
+    &lt;rect x=&quot;10&quot; y=&quot;25&quot; width=&quot;150&quot; height=&quot;40&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;85&quot; y=&quot;49&quot; text-anchor=&quot;middle&quot; font-size=&quot;13&quot; fill=&quot;var(--ink)&quot;&gt;User Prompt&lt;/text&gt;
+    &lt;line x1=&quot;160&quot; y1=&quot;45&quot; x2=&quot;300&quot; y2=&quot;45&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrow)&quot;/&gt;
+    &lt;rect x=&quot;310&quot; y=&quot;15&quot; width=&quot;160&quot; height=&quot;60&quot; rx=&quot;6&quot; fill=&quot;var(--teal-soft)&quot; stroke=&quot;var(--teal)&quot;/&gt;
+    &lt;text x=&quot;390&quot; y=&quot;49&quot; text-anchor=&quot;middle&quot; font-size=&quot;13&quot; fill=&quot;var(--ink)&quot;&gt;LLM&lt;/text&gt;
+    &lt;line x1=&quot;470&quot; y1=&quot;45&quot; x2=&quot;610&quot; y2=&quot;45&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrow)&quot;/&gt;
+    &lt;rect x=&quot;620&quot; y=&quot;25&quot; width=&quot;150&quot; height=&quot;40&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;695&quot; y=&quot;49&quot; text-anchor=&quot;middle&quot; font-size=&quot;13&quot; fill=&quot;var(--ink)&quot;&gt;Response&lt;/text&gt;
+    &lt;defs&gt;&lt;marker id=&quot;arrow&quot; markerWidth=&quot;8&quot; markerHeight=&quot;8&quot; refX=&quot;6&quot; refY=&quot;4&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0,0 L8,4 L0,8 Z&quot; fill=&quot;var(--ink)&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;
+  &lt;/svg&gt;
+
+  &lt;p&gt;This bare pipeline tends to produce responses that are:&lt;/p&gt;
+  &lt;ul class=&quot;points&quot;&gt;
+    &lt;li&gt;&lt;b&gt;Inaccurate&lt;/b&gt; — no way to check facts against a source.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;Outdated&lt;/b&gt; — frozen at the training cutoff.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;Fabricated&lt;/b&gt; — &quot;hallucinations,&quot; stated with full confidence.&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;Unverifiable&lt;/b&gt; — no citation trail back to a source document.&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;div class=&quot;warn&quot;&gt;&lt;b&gt;Key gap:&lt;/b&gt; a bare LLM cannot access anything outside the prompt + its frozen training data. RAG closes that gap with a live, external data store.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ LONG CONTEXT vs RAG ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;03 — Alternative Approach&lt;/div&gt;
+  &lt;h2&gt;&quot;Why not just use a bigger context window?&quot;&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;Modern models handle 128K+ tokens (~96,000 English words) — but stuffing everything into the prompt has its own costs.&lt;/p&gt;
+
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Challenge&lt;/th&gt;&lt;th&gt;Long-context-only&lt;/th&gt;&lt;th&gt;RAG&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Input dependency&lt;/td&gt;&lt;td&gt;You must already have &amp;amp; supply the source text&lt;/td&gt;&lt;td&gt;Connects to an external store the user never has to touch&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Capacity&lt;/td&gt;&lt;td&gt;Still finite — e.g. War and Peace (~560K words) blows past 128K tokens&lt;/td&gt;&lt;td&gt;Retrieves only the relevant slice, however large the corpus&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Redundancy&lt;/td&gt;&lt;td&gt;&quot;Needle in a haystack&quot; — signal buried in noise&lt;/td&gt;&lt;td&gt;Only pertinent chunks are passed to the LLM&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Processing time&lt;/td&gt;&lt;td&gt;Longer prompt → slower response&lt;/td&gt;&lt;td&gt;Short augmented prompt → faster response&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Cost&lt;/td&gt;&lt;td&gt;More tokens → higher compute cost&lt;/td&gt;&lt;td&gt;Smaller prompts → lower cost at scale&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;p style=&quot;font-size:14px;color:var(--ink-soft)&quot;&gt;Rule of thumb used in the course material: ~100 tokens ≈ 75 English words.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ ARCHITECTURE ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;04 — Architecture&lt;/div&gt;
+  &lt;h2&gt;The RAG pipeline, end to end&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;Two phases: an offline &lt;b&gt;indexing&lt;/b&gt; phase (bottom row) that only runs when documents change, and an online &lt;b&gt;query&lt;/b&gt; phase (top row) that runs per user prompt.&lt;/p&gt;
+
+  &lt;svg viewBox=&quot;0 0 820 300&quot; width=&quot;100%&quot; height=&quot;300&quot;&gt;
+    &lt;!-- indexing phase --&gt;
+    &lt;text x=&quot;10&quot; y=&quot;24&quot; font-size=&quot;11&quot; fill=&quot;var(--ink-soft)&quot;&gt;INDEXING (offline)&lt;/text&gt;
+    &lt;rect x=&quot;10&quot; y=&quot;35&quot; width=&quot;130&quot; height=&quot;50&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;75&quot; y=&quot;65&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Source Docs&lt;/text&gt;
+    &lt;line x1=&quot;140&quot; y1=&quot;60&quot; x2=&quot;190&quot; y2=&quot;60&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;rect x=&quot;195&quot; y=&quot;35&quot; width=&quot;130&quot; height=&quot;50&quot; rx=&quot;6&quot; fill=&quot;var(--teal-soft)&quot; stroke=&quot;var(--teal)&quot;/&gt;
+    &lt;text x=&quot;260&quot; y=&quot;58&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Chunk +&lt;/text&gt;
+    &lt;text x=&quot;260&quot; y=&quot;72&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Embed&lt;/text&gt;
+    &lt;line x1=&quot;325&quot; y1=&quot;60&quot; x2=&quot;375&quot; y2=&quot;60&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;rect x=&quot;380&quot; y=&quot;35&quot; width=&quot;140&quot; height=&quot;50&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;450&quot; y=&quot;65&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Vector Store&lt;/text&gt;
+
+    &lt;!-- query phase --&gt;
+    &lt;text x=&quot;10&quot; y=&quot;150&quot; font-size=&quot;11&quot; fill=&quot;var(--ink-soft)&quot;&gt;QUERY (online, per request)&lt;/text&gt;
+    &lt;rect x=&quot;10&quot; y=&quot;162&quot; width=&quot;130&quot; height=&quot;50&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;75&quot; y=&quot;192&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;User Prompt&lt;/text&gt;
+    &lt;line x1=&quot;75&quot; y1=&quot;212&quot; x2=&quot;75&quot; y2=&quot;240&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;rect x=&quot;10&quot; y=&quot;245&quot; width=&quot;130&quot; height=&quot;45&quot; rx=&quot;6&quot; fill=&quot;var(--teal-soft)&quot; stroke=&quot;var(--teal)&quot;/&gt;
+    &lt;text x=&quot;75&quot; y=&quot;272&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Embed Prompt&lt;/text&gt;
+
+    &lt;line x1=&quot;140&quot; y1=&quot;267&quot; x2=&quot;380&quot; y2=&quot;267&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;line x1=&quot;450&quot; y1=&quot;85&quot; x2=&quot;450&quot; y2=&quot;255&quot; stroke=&quot;var(--ink)&quot; stroke-dasharray=&quot;3,3&quot;/&gt;
+    &lt;line x1=&quot;450&quot; y1=&quot;255&quot; x2=&quot;392&quot; y2=&quot;267&quot; stroke=&quot;var(--ink)&quot; stroke-dasharray=&quot;3,3&quot;/&gt;
+    &lt;rect x=&quot;390&quot; y=&quot;245&quot; width=&quot;140&quot; height=&quot;45&quot; rx=&quot;6&quot; fill=&quot;var(--amber-soft)&quot; stroke=&quot;var(--amber)&quot;/&gt;
+    &lt;text x=&quot;460&quot; y=&quot;272&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Retriever&lt;/text&gt;
+
+    &lt;line x1=&quot;530&quot; y1=&quot;267&quot; x2=&quot;580&quot; y2=&quot;267&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;rect x=&quot;585&quot; y=&quot;245&quot; width=&quot;130&quot; height=&quot;45&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;650&quot; y=&quot;264&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot;&gt;Retrieved&lt;/text&gt;
+    &lt;text x=&quot;650&quot; y=&quot;278&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot;&gt;Text&lt;/text&gt;
+
+    &lt;line x1=&quot;650&quot; y1=&quot;245&quot; x2=&quot;650&quot; y2=&quot;90&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;line x1=&quot;140&quot; y1=&quot;187&quot; x2=&quot;700&quot; y2=&quot;90&quot; stroke=&quot;var(--ink)&quot; stroke-dasharray=&quot;2,2&quot;/&gt;
+    &lt;rect x=&quot;590&quot; y=&quot;55&quot; width=&quot;150&quot; height=&quot;55&quot; rx=&quot;6&quot; fill=&quot;var(--teal-soft)&quot; stroke=&quot;var(--teal)&quot;/&gt;
+    &lt;text x=&quot;665&quot; y=&quot;78&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Augmented&lt;/text&gt;
+    &lt;text x=&quot;665&quot; y=&quot;93&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Prompt&lt;/text&gt;
+
+    &lt;line x1=&quot;740&quot; y1=&quot;82&quot; x2=&quot;795&quot; y2=&quot;82&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;line x1=&quot;795&quot; y1=&quot;82&quot; x2=&quot;795&quot; y2=&quot;150&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;795&quot; y=&quot;170&quot; font-size=&quot;12&quot; text-anchor=&quot;middle&quot;&gt;LLM&lt;/text&gt;
+    &lt;circle cx=&quot;795&quot; cy=&quot;185&quot; r=&quot;20&quot; fill=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;795&quot; y=&quot;190&quot; font-size=&quot;11&quot; fill=&quot;var(--paper)&quot; text-anchor=&quot;middle&quot;&gt;LLM&lt;/text&gt;
+    &lt;line x1=&quot;795&quot; y1=&quot;205&quot; x2=&quot;795&quot; y2=&quot;240&quot; stroke=&quot;var(--ink)&quot; marker-end=&quot;url(#a2)&quot;/&gt;
+    &lt;rect x=&quot;725&quot; y=&quot;245&quot; width=&quot;140&quot; height=&quot;45&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+    &lt;text x=&quot;795&quot; y=&quot;272&quot; text-anchor=&quot;middle&quot; font-size=&quot;12&quot;&gt;Response&lt;/text&gt;
+
+    &lt;defs&gt;&lt;marker id=&quot;a2&quot; markerWidth=&quot;8&quot; markerHeight=&quot;8&quot; refX=&quot;6&quot; refY=&quot;4&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0,0 L8,4 L0,8 Z&quot; fill=&quot;var(--ink)&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;
+  &lt;/svg&gt;
+  &lt;p style=&quot;font-size:13.5px;color:var(--ink-soft)&quot;&gt;Dashed lines: the vector store is consulted by the retriever; the retrieved text is merged with the original prompt before hitting the LLM.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ STEP BY STEP ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;05 — The 8 Steps&lt;/div&gt;
+  &lt;h2&gt;Pipeline, step by step&lt;/h2&gt;
+
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;1&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Gather Sources&lt;/h4&gt;&lt;p&gt;Collect docs (policies, manuals, etc). Often needs preprocessing — e.g. converting PDFs to plain text.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;2&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Embed Sources&lt;/h4&gt;&lt;p&gt;&lt;b&gt;Chunk&lt;/b&gt; large docs into smaller pieces → &lt;b&gt;tokenize&lt;/b&gt; each chunk → run token IDs through an embedding model&#x27;s neural network → get a fixed-length vector per chunk.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;3&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Store Vectors&lt;/h4&gt;&lt;p&gt;Save vectors in a vector database (ChromaDB, FAISS, Milvus) optimized for similarity search at scale.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;4&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Obtain User&#x27;s Prompt&lt;/h4&gt;&lt;p&gt;Take the live query — optionally combined with prior chat history via a memory tool (e.g. LangChain&#x27;s ConversationBufferMemory).&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;5&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Embed the Prompt&lt;/h4&gt;&lt;p&gt;Run the same embedding model used on the source docs, so prompt and source vectors live in the same space.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;6&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Retrieve Relevant Data&lt;/h4&gt;&lt;p&gt;Similarity search (cosine similarity or dot product) finds the nearest source vectors — the &quot;retrieved text.&quot;&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;7&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Create Augmented Prompt&lt;/h4&gt;&lt;p&gt;Merge retrieved text + original prompt — either simple concatenation, or a structured prompt template with instructions.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;8&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Obtain a Response&lt;/h4&gt;&lt;p&gt;Feed the augmented prompt to the LLM. Output can be passed through a template for consistent formatting.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ SIMILARITY ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;06 — Retrieval Mechanics&lt;/div&gt;
+  &lt;h2&gt;Measuring similarity&lt;/h2&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Metric&lt;/th&gt;&lt;th&gt;Compares&lt;/th&gt;&lt;th&gt;Notes&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Cosine similarity&lt;/td&gt;&lt;td&gt;Angle only&lt;/td&gt;&lt;td&gt;Ignores vector length/magnitude&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Dot product&lt;/td&gt;&lt;td&gt;Angle + magnitude&lt;/td&gt;&lt;td&gt;Sensitive to vector size, not just direction&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;p&gt;Common vector store choices: &lt;b&gt;ChromaDB&lt;/b&gt;, &lt;b&gt;FAISS&lt;/b&gt;, &lt;b&gt;Milvus&lt;/b&gt; — each with different trade-offs on scale, speed, and hosting.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ CODE ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;07 — LangChain Implementation&lt;/div&gt;
+  &lt;h2&gt;Code walkthrough&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;The building blocks from the lab, in pipeline order.&lt;/p&gt;
+
+  &lt;h3&gt;Setup &amp;amp; imports&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;cm&quot;&gt;# core LangChain pieces used across the pipeline&lt;/span&gt;
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain.document_loaders &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; TextLoader
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain.text_splitter &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; CharacterTextSplitter
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain.vectorstores &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; Chroma
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain.embeddings &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; HuggingFaceEmbeddings
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain.chains &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; RetrievalQA, ConversationalRetrievalChain
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain.prompts &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; PromptTemplate
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain.memory &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; ConversationBufferMemory&lt;/div&gt;
+
+  &lt;h3&gt;1 · Load the document&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;filename = &lt;span class=&quot;st&quot;&gt;&#x27;companyPolicies.txt&#x27;&lt;/span&gt;
+
+&lt;span class=&quot;kw&quot;&gt;with&lt;/span&gt; open(filename, &lt;span class=&quot;st&quot;&gt;&#x27;r&#x27;&lt;/span&gt;) &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; file:
+    contents = file.read()
+    print(contents)&lt;/div&gt;
+
+  &lt;h3&gt;2 · Split into chunks&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;loader = TextLoader(filename)
+documents = loader.load()
+
+text_splitter = CharacterTextSplitter(chunk_size=&lt;span class=&quot;fn&quot;&gt;1000&lt;/span&gt;, chunk_overlap=&lt;span class=&quot;fn&quot;&gt;0&lt;/span&gt;)
+texts = text_splitter.split_documents(documents)
+print(len(texts))&lt;/div&gt;
+
+  &lt;h3&gt;3 · Set up the LLM (watsonx.ai)&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;model_id = &lt;span class=&quot;st&quot;&gt;&#x27;mistralai/mistral-small-3-1-24b-instruct-2503&#x27;&lt;/span&gt;
+
+parameters = {
+    GenParams.DECODING_METHOD: DecodingMethods.GREEDY,
+    GenParams.MAX_NEW_TOKENS: &lt;span class=&quot;fn&quot;&gt;256&lt;/span&gt;,
+    GenParams.TEMPERATURE: &lt;span class=&quot;fn&quot;&gt;0.5&lt;/span&gt;
+}
+
+model = Model(
+    model_id=model_id,
+    params=parameters,
+    credentials={&lt;span class=&quot;st&quot;&gt;&quot;url&quot;&lt;/span&gt;: &lt;span class=&quot;st&quot;&gt;&quot;https://us-south.ml.cloud.ibm.com&quot;&lt;/span&gt;},
+    project_id=&lt;span class=&quot;st&quot;&gt;&quot;skills-network&quot;&lt;/span&gt;
+)&lt;/div&gt;
+
+  &lt;h3&gt;4 · Basic retrieval QA&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;qa = RetrievalQA.from_chain_type(
+    llm=flan_ul2_llm,
+    chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
+    retriever=docsearch.as_retriever(),
+    return_source_documents=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;
+)
+
+query = &lt;span class=&quot;st&quot;&gt;&quot;what is mobile policy?&quot;&lt;/span&gt;
+qa.invoke(query)&lt;/div&gt;
+
+  &lt;h3&gt;5 · Retrieval QA with a custom prompt template&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;prompt_template = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;Use the information from the document to answer the question at the end.
+If you don&#x27;t know the answer, just say &quot;you don&#x27;t know&quot; — do not make one up.
+
+{context}
+
+Question: {question}
+&quot;&quot;&quot;&lt;/span&gt;
+
+PROMPT = PromptTemplate(template=prompt_template, input_variables=[&lt;span class=&quot;st&quot;&gt;&quot;context&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;question&quot;&lt;/span&gt;])
+chain_type_kwargs = {&lt;span class=&quot;st&quot;&gt;&quot;prompt&quot;&lt;/span&gt;: PROMPT}
+
+qa = RetrievalQA.from_chain_type(
+    llm=llama_3_llm,
+    chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
+    retriever=docsearch.as_retriever(),
+    chain_type_kwargs=chain_type_kwargs,
+    return_source_documents=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;
+)
+
+qa.invoke(&lt;span class=&quot;st&quot;&gt;&quot;Can I eat in company vehicles?&quot;&lt;/span&gt;)&lt;/div&gt;
+
+  &lt;h3&gt;6 · Add conversational memory&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;memory = ConversationBufferMemory(memory_key=&lt;span class=&quot;st&quot;&gt;&quot;chat_history&quot;&lt;/span&gt;, return_message=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;)
+
+qa = ConversationalRetrievalChain.from_llm(
+    llm=llama_3_llm,
+    chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
+    retriever=docsearch.as_retriever(),
+    memory=memory,
+    get_chat_history=&lt;span class=&quot;kw&quot;&gt;lambda&lt;/span&gt; h: h,
+    return_source_documents=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;
+)
+
+history = []
+result = qa.invoke({&lt;span class=&quot;st&quot;&gt;&quot;question&quot;&lt;/span&gt;: &lt;span class=&quot;st&quot;&gt;&quot;What is mobile policy?&quot;&lt;/span&gt;}, {&lt;span class=&quot;st&quot;&gt;&quot;chat_history&quot;&lt;/span&gt;: history})
+print(result[&lt;span class=&quot;st&quot;&gt;&quot;answer&quot;&lt;/span&gt;])
+
+history.append((&lt;span class=&quot;st&quot;&gt;&quot;What is mobile policy?&quot;&lt;/span&gt;, result[&lt;span class=&quot;st&quot;&gt;&quot;answer&quot;&lt;/span&gt;]))
+result = qa({&lt;span class=&quot;st&quot;&gt;&quot;question&quot;&lt;/span&gt;: &lt;span class=&quot;st&quot;&gt;&quot;What is the aim of it?&quot;&lt;/span&gt;}, {&lt;span class=&quot;st&quot;&gt;&quot;chat_history&quot;&lt;/span&gt;: history})
+print(result[&lt;span class=&quot;st&quot;&gt;&quot;answer&quot;&lt;/span&gt;])&lt;/div&gt;
+
+  &lt;h3&gt;7 · Wrap it into a chat loop&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;qa_loop&lt;/span&gt;():
+    memory = ConversationBufferMemory(memory_key=&lt;span class=&quot;st&quot;&gt;&quot;chat_history&quot;&lt;/span&gt;, return_message=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;)
+    qa = ConversationalRetrievalChain.from_llm(
+        llm=llama_3_llm, chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
+        retriever=docsearch.as_retriever(), memory=memory,
+        get_chat_history=&lt;span class=&quot;kw&quot;&gt;lambda&lt;/span&gt; h: h, return_source_documents=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;
+    )
+    history = []
+    &lt;span class=&quot;kw&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;:
+        query = input(&lt;span class=&quot;st&quot;&gt;&quot;Question: &quot;&lt;/span&gt;)
+        &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; query.lower() &lt;span class=&quot;kw&quot;&gt;in&lt;/span&gt; [&lt;span class=&quot;st&quot;&gt;&quot;quit&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;exit&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;bye&quot;&lt;/span&gt;]:
+            print(&lt;span class=&quot;st&quot;&gt;&quot;Answer: Goodbye!&quot;&lt;/span&gt;)
+            &lt;span class=&quot;kw&quot;&gt;break&lt;/span&gt;
+        result = qa({&lt;span class=&quot;st&quot;&gt;&quot;question&quot;&lt;/span&gt;: query}, {&lt;span class=&quot;st&quot;&gt;&quot;chat_history&quot;&lt;/span&gt;: history})
+        history.append((query, result[&lt;span class=&quot;st&quot;&gt;&quot;answer&quot;&lt;/span&gt;]))
+        print(&lt;span class=&quot;st&quot;&gt;&quot;Answer: &quot;&lt;/span&gt;, result[&lt;span class=&quot;st&quot;&gt;&quot;answer&quot;&lt;/span&gt;])
+
+qa_loop()&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ GLOSSARY ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;08 — Reference&lt;/div&gt;
+  &lt;h2&gt;Glossary&lt;/h2&gt;
+  &lt;dl class=&quot;gloss&quot;&gt;
+    &lt;dt&gt;Chunking&lt;/dt&gt;&lt;dd&gt;Splitting a large document into smaller pieces so retrieval can pull just the relevant part, not the whole file.&lt;/dd&gt;
+    &lt;dt&gt;Embedding&lt;/dt&gt;&lt;dd&gt;Converting text into a fixed-length numeric vector that captures its meaning.&lt;/dd&gt;
+    &lt;dt&gt;Tokenization&lt;/dt&gt;&lt;dd&gt;Splitting text into tokens (words/sub-words/punctuation) and mapping each to a numeric ID.&lt;/dd&gt;
+    &lt;dt&gt;Vector store&lt;/dt&gt;&lt;dd&gt;A database optimized for storing and searching vectors (e.g. ChromaDB, FAISS, Milvus).&lt;/dd&gt;
+    &lt;dt&gt;Retriever&lt;/dt&gt;&lt;dd&gt;The component that searches the vector store for chunks similar to the prompt embedding.&lt;/dd&gt;
+    &lt;dt&gt;Augmented prompt&lt;/dt&gt;&lt;dd&gt;The original user prompt combined with retrieved text, sent to the LLM.&lt;/dd&gt;
+    &lt;dt&gt;Cosine similarity&lt;/dt&gt;&lt;dd&gt;Similarity metric comparing vector angle only.&lt;/dd&gt;
+    &lt;dt&gt;Dot product&lt;/dt&gt;&lt;dd&gt;Similarity metric comparing both vector angle and magnitude.&lt;/dd&gt;
+    &lt;dt&gt;Hallucination&lt;/dt&gt;&lt;dd&gt;A confident but fabricated or incorrect model response.&lt;/dd&gt;
+  &lt;/dl&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ RECAP ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;09 — Recap&lt;/div&gt;
+  &lt;h2&gt;One-paragraph summary&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;RAG augments an LLM&#x27;s prompt with text retrieved from an external, embedded knowledge store — improving accuracy, keeping answers current, and making sources traceable, without retraining the model. It beats relying on long context windows alone because it sidesteps input dependency, capacity limits, redundancy, latency, and cost.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;div class=&quot;footer-note&quot;&gt;Module 1 complete — ready for Module 2 →&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" title="Module 1 — RAG Fundamentals"></iframe>
+</div>
+
+<div class="module-block">
+  <iframe id="mod1" class="module-frame" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Gradio Handbook — Module 2&lt;/title&gt;
+&lt;style&gt;
+  :root{
+    --paper:#F6F3EC;
+    --paper-raised:#FFFFFF;
+    --ink:#1B2430;
+    --ink-soft:#4B5563;
+    --teal:#1F6F64;
+    --teal-soft:#DCEDE9;
+    --amber:#B5651D;
+    --amber-soft:#F3E3D3;
+    --line:#DDD6C8;
+    --code-bg:#1B2430;
+    --code-text:#E7E2D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,Palatino,Georgia,serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 32px 120px;}
+
+  /* ---------- COVER ---------- */
+  .cover{
+    padding:90px 32px 70px;
+    max-width:880px;margin:0 auto;
+    border-bottom:2px solid var(--ink);
+  }
+  .eyebrow{
+    font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:18px;
+  }
+  h1.title{
+    font-family:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,Georgia,serif;
+    font-size:56px;line-height:1.05;margin:0 0 14px;font-weight:700;
+    letter-spacing:-0.5px;
+  }
+  .subtitle{font-size:19px;color:var(--ink-soft);max-width:560px;margin-bottom:34px;font-style:italic;}
+  .meta-row{display:flex;gap:28px;flex-wrap:wrap;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;color:var(--ink-soft);}
+  .meta-row div span{display:block;color:var(--ink);font-size:13px;margin-top:3px;}
+
+  .vec-motif{margin-top:36px;}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-child{border-bottom:none;}
+  .sec-label{
+    font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;letter-spacing:.14em;
+    color:var(--teal);text-transform:uppercase;margin-bottom:10px;
+  }
+  h2{font-size:30px;margin:0 0 20px;letter-spacing:-.3px;}
+  h3{font-size:20px;margin:30px 0 12px;color:var(--ink);}
+  p{font-size:16.5px;color:var(--ink);margin:0 0 14px;}
+  .lede{font-size:18px;color:var(--ink-soft);max-width:680px;}
+
+  ul.points{margin:0 0 18px;padding-left:0;list-style:none;}
+  ul.points li{position:relative;padding-left:26px;margin-bottom:10px;font-size:16px;}
+  ul.points li::before{content:&quot;→&quot;;position:absolute;left:0;color:var(--teal);font-weight:700;}
+
+  .callout{background:var(--teal-soft);border-left:3px solid var(--teal);padding:16px 20px;border-radius:2px;margin:20px 0;font-size:15.5px;}
+  .callout b{color:var(--teal);}
+  .warn{background:var(--amber-soft);border-left:3px solid var(--amber);padding:16px 20px;border-radius:2px;margin:20px 0;font-size:15.5px;}
+  .warn b{color:var(--amber);}
+
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:15px;}
+  th{text-align:left;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);padding:10px 14px;border-bottom:2px solid var(--ink);}
+  td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr td:first-child{font-weight:600;white-space:nowrap;}
+
+  .code-block{background:var(--code-bg);color:var(--code-text);border-radius:8px;padding:18px 20px;margin:16px 0 26px;overflow-x:auto;font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.65;white-space:pre-wrap;}
+  .cm{color:#8B94A3;} .kw{color:#7FB7E8;} .st{color:#C6E29B;} .fn{color:#E6B673;}
+
+  .step{display:flex;gap:18px;padding:18px 0;border-top:1px solid var(--line);}
+  .step:first-of-type{border-top:none;}
+  .step-num{font-family:&#x27;Iowan Old Style&#x27;,Georgia,serif;font-size:26px;color:var(--teal);min-width:42px;font-weight:700;}
+  .step-body h4{margin:0 0 6px;font-size:17px;}
+  .step-body p{margin:0;font-size:15px;color:var(--ink-soft);}
+
+  .gloss{display:grid;grid-template-columns:180px 1fr;gap:6px 20px;font-size:15px;margin-top:10px;}
+  .gloss dt{font-weight:700;color:var(--teal);padding:10px 0;border-top:1px solid var(--line);}
+  .gloss dd{margin:0;padding:10px 0;border-top:1px solid var(--line);color:var(--ink-soft);}
+
+  .footer-note{font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;color:var(--ink-soft);text-align:center;padding:40px 0 0;}
+  svg text{font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,Menlo,monospace;}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div class=&quot;cover&quot;&gt;
+  &lt;div class=&quot;eyebrow&quot;&gt;IBM · RAG SYSTEMS · SKILLS NETWORK&lt;/div&gt;
+  &lt;h1 class=&quot;title&quot;&gt;Gradio for&lt;br&gt;Model Interfaces&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Module 2 field notes — turning a Python function into a shareable web app, and wiring an LLM behind it.&lt;/div&gt;
+  &lt;div class=&quot;meta-row&quot;&gt;
+    &lt;div&gt;CORE CLASS&lt;span&gt;gr.Interface&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;CORE IDEA&lt;span&gt;Function → Interface → Server → URL&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;USED FOR&lt;span&gt;Chatbots, image tasks, demos&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;vec-motif&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 820 130&quot; width=&quot;100%&quot; height=&quot;130&quot;&gt;
+      &lt;rect x=&quot;20&quot; y=&quot;42&quot; width=&quot;150&quot; height=&quot;46&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+      &lt;text x=&quot;95&quot; y=&quot;70&quot; text-anchor=&quot;middle&quot; font-size=&quot;13&quot; fill=&quot;var(--ink)&quot;&gt;def fn(x):&lt;/text&gt;
+      &lt;line x1=&quot;170&quot; y1=&quot;65&quot; x2=&quot;250&quot; y2=&quot;65&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrM)&quot;/&gt;
+      &lt;rect x=&quot;255&quot; y=&quot;30&quot; width=&quot;180&quot; height=&quot;72&quot; rx=&quot;8&quot; fill=&quot;var(--teal-soft)&quot; stroke=&quot;var(--teal)&quot; stroke-width=&quot;1.5&quot;/&gt;
+      &lt;text x=&quot;345&quot; y=&quot;60&quot; text-anchor=&quot;middle&quot; font-size=&quot;13&quot; fill=&quot;var(--ink)&quot;&gt;gr.Interface&lt;/text&gt;
+      &lt;text x=&quot;345&quot; y=&quot;78&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; fill=&quot;var(--ink-soft)&quot;&gt;inputs · outputs&lt;/text&gt;
+      &lt;line x1=&quot;435&quot; y1=&quot;65&quot; x2=&quot;510&quot; y2=&quot;65&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrM)&quot;/&gt;
+      &lt;rect x=&quot;515&quot; y=&quot;42&quot; width=&quot;130&quot; height=&quot;46&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+      &lt;text x=&quot;580&quot; y=&quot;70&quot; text-anchor=&quot;middle&quot; font-size=&quot;13&quot;&gt;.launch()&lt;/text&gt;
+      &lt;line x1=&quot;645&quot; y1=&quot;65&quot; x2=&quot;710&quot; y2=&quot;65&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrM)&quot;/&gt;
+      &lt;circle cx=&quot;750&quot; cy=&quot;65&quot; r=&quot;26&quot; fill=&quot;var(--amber-soft)&quot; stroke=&quot;var(--amber)&quot; stroke-width=&quot;1.5&quot;/&gt;
+      &lt;text x=&quot;750&quot; y=&quot;62&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--amber)&quot;&gt;web&lt;/text&gt;
+      &lt;text x=&quot;750&quot; y=&quot;74&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--amber)&quot;&gt;URL&lt;/text&gt;
+      &lt;defs&gt;&lt;marker id=&quot;arrM&quot; markerWidth=&quot;8&quot; markerHeight=&quot;8&quot; refX=&quot;6&quot; refY=&quot;4&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0,0 L8,4 L0,8 Z&quot; fill=&quot;var(--ink)&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;wrap&quot;&gt;
+
+&lt;!-- ============ WHAT IS GRADIO ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;01 — Definition&lt;/div&gt;
+  &lt;h2&gt;What is Gradio?&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;An open-source Python library that wraps a function — including an LLM call — in a browser-based UI, in a few lines of code.&lt;/p&gt;
+  &lt;ul class=&quot;points&quot;&gt;
+    &lt;li&gt;Purpose-built for machine learning demos and computational tools.&lt;/li&gt;
+    &lt;li&gt;Takes any Python function and gives it input/output components: text boxes, sliders, image droppers, file uploaders.&lt;/li&gt;
+    &lt;li&gt;Ships with a built-in web server — no separate frontend or backend to write.&lt;/li&gt;
+    &lt;li&gt;Can generate a public shareable URL (&lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:14px&quot;&gt;share=True&lt;/span&gt;), so others can use your app while it runs on your machine.&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class=&quot;callout&quot;&gt;&lt;b&gt;Why it matters for RAG:&lt;/b&gt; once your retrieval + LLM pipeline works in a notebook, Gradio is the fastest way to put a real chat window in front of it.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ HOW IT WORKS ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;02 — Workflow&lt;/div&gt;
+  &lt;h2&gt;Four steps, every time&lt;/h2&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;1&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Write the Python function&lt;/h4&gt;&lt;p&gt;Define the logic your app runs — plain arguments in, a value (or tuple) out.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;2&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Create the interface&lt;/h4&gt;&lt;p&gt;&lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace&quot;&gt;gr.Interface(fn, inputs, outputs)&lt;/span&gt; maps your function&#x27;s arguments and return value to UI components.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;3&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Launch the server&lt;/h4&gt;&lt;p&gt;&lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace&quot;&gt;demo.launch()&lt;/span&gt; starts a local web server hosting the interface.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;4&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Access the interface&lt;/h4&gt;&lt;p&gt;Open the local URL (or a public one with &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace&quot;&gt;share=True&lt;/span&gt;) and interact in real time.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ SETUP ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;03 — Environment Setup&lt;/div&gt;
+  &lt;h2&gt;Getting a clean environment running&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;A virtual environment keeps this lab&#x27;s package versions isolated from everything else on your machine.&lt;/p&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;cm&quot;&gt;# create &amp; activate a virtual environment&lt;/span&gt;
+pip install virtualenv
+virtualenv my_env
+&lt;span class=&quot;kw&quot;&gt;source&lt;/span&gt; my_env/bin/activate
+
+&lt;span class=&quot;cm&quot;&gt;# install the packages this module needs&lt;/span&gt;
+python3.11 -m pip install \
+gradio==&lt;span class=&quot;fn&quot;&gt;4.44.0&lt;/span&gt; \
+jinja2==&lt;span class=&quot;fn&quot;&gt;3.1.4&lt;/span&gt; \
+pydantic==&lt;span class=&quot;fn&quot;&gt;2.10.6&lt;/span&gt; \
+huggingface_hub==&lt;span class=&quot;fn&quot;&gt;0.23.0&lt;/span&gt; \
+fastapi==&lt;span class=&quot;fn&quot;&gt;0.112.2&lt;/span&gt; \
+starlette==&lt;span class=&quot;fn&quot;&gt;0.37.2&lt;/span&gt; \
+uvicorn==&lt;span class=&quot;fn&quot;&gt;0.30.6&lt;/span&gt; \
+ibm-watsonx-ai==&lt;span class=&quot;fn&quot;&gt;1.1.2&lt;/span&gt; \
+langchain==&lt;span class=&quot;fn&quot;&gt;0.2.11&lt;/span&gt; \
+langchain-community==&lt;span class=&quot;fn&quot;&gt;0.2.10&lt;/span&gt; \
+langchain-ibm==&lt;span class=&quot;fn&quot;&gt;0.1.11&lt;/span&gt;&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ INTERFACE CORE ARGS ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;04 — API Surface&lt;/div&gt;
+  &lt;h2&gt;gr.Interface — the three core arguments&lt;/h2&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Argument&lt;/th&gt;&lt;th&gt;Role&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;fn&lt;/td&gt;&lt;td&gt;The function being wrapped. Each function parameter becomes one input component; the return value (single value or tuple) maps to the output component(s).&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;inputs&lt;/td&gt;&lt;td&gt;The Gradio component(s) for the function&#x27;s inputs — count must match the function&#x27;s parameters.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;outputs&lt;/td&gt;&lt;td&gt;The Gradio component(s) for the function&#x27;s return value(s).&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ INPUTS / OUTPUTS ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;05 — Components&lt;/div&gt;
+  &lt;h2&gt;Common inputs&lt;/h2&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Component&lt;/th&gt;&lt;th&gt;Behavior&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Textbox&lt;/td&gt;&lt;td&gt;Expandable text field for typed input.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Number&lt;/td&gt;&lt;td&gt;Numeric input field.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Slider&lt;/td&gt;&lt;td&gt;Pick a value between min/max; &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:13px&quot;&gt;value&lt;/span&gt; sets the default, &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:13px&quot;&gt;step&lt;/span&gt; sets the increment.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Checkbox&lt;/td&gt;&lt;td&gt;True/False toggle.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;CheckboxGroup&lt;/td&gt;&lt;td&gt;Select multiple values from a predefined list.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Radio&lt;/td&gt;&lt;td&gt;Force a single choice from a list.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Dropdown&lt;/td&gt;&lt;td&gt;Pick one value by default; set &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:13px&quot;&gt;multiselect=True&lt;/span&gt; for several.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Image&lt;/td&gt;&lt;td&gt;Upload or select an image (e.g. &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:13px&quot;&gt;type=&quot;pil&quot;&lt;/span&gt;).&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;File&lt;/td&gt;&lt;td&gt;Upload one or more files; returns file paths to your function.&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+
+  &lt;h3&gt;Common outputs&lt;/h3&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Component&lt;/th&gt;&lt;th&gt;Behavior&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Textbox / &quot;text&quot;&lt;/td&gt;&lt;td&gt;Most common for LLM output — an expandable text field.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Label&lt;/td&gt;&lt;td&gt;Built for classification — shows predicted probabilities per class. Use &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:13px&quot;&gt;num_top_classes&lt;/span&gt; to limit how many are shown.&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ CODE: BASICS ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;06 — Building Interfaces&lt;/div&gt;
+  &lt;h2&gt;Code walkthrough&lt;/h2&gt;
+
+  &lt;h3&gt;1 · Minimal text-in, text-out&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;pip install gradio&lt;/div&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; gradio &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; gr
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;greet&lt;/span&gt;(name, intensity):
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;st&quot;&gt;&quot;Hello, &quot;&lt;/span&gt; + name + &lt;span class=&quot;st&quot;&gt;&quot;!&quot;&lt;/span&gt; * int(intensity)
+
+demo = gr.Interface(
+    fn=greet,
+    inputs=[&lt;span class=&quot;st&quot;&gt;&quot;text&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;slider&quot;&lt;/span&gt;],
+    outputs=[&lt;span class=&quot;st&quot;&gt;&quot;text&quot;&lt;/span&gt;],
+)
+demo.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, server_port=&lt;span class=&quot;fn&quot;&gt;7860&lt;/span&gt;)&lt;/div&gt;
+
+  &lt;h3&gt;2 · Two text boxes (input → output passthrough)&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; gradio &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; gr
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;add_numbers&lt;/span&gt;(t1, t2):
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; t1 + &lt;span class=&quot;st&quot;&gt;&quot; &quot;&lt;/span&gt; + t2
+
+demo = gr.Interface(
+    fn=add_numbers,
+    inputs=[gr.Textbox(), gr.Textbox()],
+    outputs=gr.Textbox()
+)
+demo.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, server_port=&lt;span class=&quot;fn&quot;&gt;7860&lt;/span&gt;)&lt;/div&gt;
+
+  &lt;h3&gt;3 · Multiple input types together&lt;/h3&gt;
+  &lt;p&gt;Slider, Dropdown, CheckboxGroup, Radio, multiselect Dropdown, and Checkbox — combined, plus reusable &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace&quot;&gt;examples&lt;/span&gt;.&lt;/p&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; gradio &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; gr
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;sentence_builder&lt;/span&gt;(quantity, tech_worker_type, countries, place, activity_list, morning):
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;st&quot;&gt;f&quot;The {quantity} {tech_worker_type}s from {&#x27; and &#x27;.join(countries)} &quot;&lt;/span&gt; \
+           &lt;span class=&quot;st&quot;&gt;f&quot;went to the {place} where they {&#x27; and &#x27;.join(activity_list)} &quot;&lt;/span&gt; \
+           &lt;span class=&quot;st&quot;&gt;f&quot;until the {&#x27;morning&#x27; if morning else &#x27;night&#x27;}&quot;&lt;/span&gt;
+
+demo = gr.Interface(
+    fn=sentence_builder,
+    inputs=[
+        gr.Slider(&lt;span class=&quot;fn&quot;&gt;3&lt;/span&gt;, &lt;span class=&quot;fn&quot;&gt;20&lt;/span&gt;, value=&lt;span class=&quot;fn&quot;&gt;4&lt;/span&gt;, step=&lt;span class=&quot;fn&quot;&gt;1&lt;/span&gt;, label=&lt;span class=&quot;st&quot;&gt;&quot;Count&quot;&lt;/span&gt;, info=&lt;span class=&quot;st&quot;&gt;&quot;Choose between 3 and 20&quot;&lt;/span&gt;),
+        gr.Dropdown([&lt;span class=&quot;st&quot;&gt;&quot;Data Scientist&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Software Developer&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Software Engineer&quot;&lt;/span&gt;], label=&lt;span class=&quot;st&quot;&gt;&quot;tech_worker_type&quot;&lt;/span&gt;),
+        gr.CheckboxGroup([&lt;span class=&quot;st&quot;&gt;&quot;Canada&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Japan&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;France&quot;&lt;/span&gt;], label=&lt;span class=&quot;st&quot;&gt;&quot;Countries&quot;&lt;/span&gt;),
+        gr.Radio([&lt;span class=&quot;st&quot;&gt;&quot;office&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;restaurant&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;meeting room&quot;&lt;/span&gt;], label=&lt;span class=&quot;st&quot;&gt;&quot;Location&quot;&lt;/span&gt;),
+        gr.Dropdown([&lt;span class=&quot;st&quot;&gt;&quot;partied&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;brainstormed&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;coded&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;fixed bugs&quot;&lt;/span&gt;],
+                    value=[&lt;span class=&quot;st&quot;&gt;&quot;brainstormed&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;fixed bugs&quot;&lt;/span&gt;], multiselect=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;, label=&lt;span class=&quot;st&quot;&gt;&quot;Activities&quot;&lt;/span&gt;),
+        gr.Checkbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Morning&quot;&lt;/span&gt;),
+    ],
+    outputs=&lt;span class=&quot;st&quot;&gt;&quot;text&quot;&lt;/span&gt;,
+    examples=[
+        [&lt;span class=&quot;fn&quot;&gt;3&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Software Developer&quot;&lt;/span&gt;, [&lt;span class=&quot;st&quot;&gt;&quot;Canada&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Japan&quot;&lt;/span&gt;], &lt;span class=&quot;st&quot;&gt;&quot;restaurant&quot;&lt;/span&gt;, [&lt;span class=&quot;st&quot;&gt;&quot;coded&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;fixed bugs&quot;&lt;/span&gt;], &lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;],
+        [&lt;span class=&quot;fn&quot;&gt;4&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Data Scientist&quot;&lt;/span&gt;, [&lt;span class=&quot;st&quot;&gt;&quot;Japan&quot;&lt;/span&gt;], &lt;span class=&quot;st&quot;&gt;&quot;office&quot;&lt;/span&gt;, [&lt;span class=&quot;st&quot;&gt;&quot;brainstormed&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;partied&quot;&lt;/span&gt;], &lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;],
+    ]
+)
+demo.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, server_port=&lt;span class=&quot;fn&quot;&gt;7860&lt;/span&gt;)&lt;/div&gt;
+
+  &lt;h3&gt;4 · Image captioning (BLIP)&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; gradio &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; gr
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; transformers &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; BlipProcessor, BlipForConditionalGeneration
+
+processor = BlipProcessor.from_pretrained(&lt;span class=&quot;st&quot;&gt;&quot;Salesforce/blip-image-captioning-base&quot;&lt;/span&gt;)
+model = BlipForConditionalGeneration.from_pretrained(&lt;span class=&quot;st&quot;&gt;&quot;Salesforce/blip-image-captioning-base&quot;&lt;/span&gt;)
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;caption_image&lt;/span&gt;(image):
+    &lt;span class=&quot;kw&quot;&gt;try&lt;/span&gt;:
+        inputs = processor(images=image, return_tensors=&lt;span class=&quot;st&quot;&gt;&quot;pt&quot;&lt;/span&gt;)
+        outputs = model.generate(**inputs)
+        &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; processor.decode(outputs[&lt;span class=&quot;fn&quot;&gt;0&lt;/span&gt;], skip_special_tokens=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;)
+    &lt;span class=&quot;kw&quot;&gt;except&lt;/span&gt; Exception &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; e:
+        &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;st&quot;&gt;f&quot;An error occurred: {str(e)}&quot;&lt;/span&gt;
+
+iface = gr.Interface(
+    fn=caption_image,
+    inputs=gr.Image(type=&lt;span class=&quot;st&quot;&gt;&quot;pil&quot;&lt;/span&gt;),
+    outputs=&lt;span class=&quot;st&quot;&gt;&quot;text&quot;&lt;/span&gt;,
+    title=&lt;span class=&quot;st&quot;&gt;&quot;Image Captioning with BLIP&quot;&lt;/span&gt;,
+    description=&lt;span class=&quot;st&quot;&gt;&quot;Upload an image to generate a caption.&quot;&lt;/span&gt;
+)
+iface.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, server_port=&lt;span class=&quot;fn&quot;&gt;7860&lt;/span&gt;)&lt;/div&gt;
+
+  &lt;h3&gt;5 · Image classification (ResNet-18)&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; torch, requests
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; torchvision &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; transforms
+&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; gradio &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; gr
+
+model = torch.hub.load(&lt;span class=&quot;st&quot;&gt;&#x27;pytorch/vision:v0.6.0&#x27;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&#x27;resnet18&#x27;&lt;/span&gt;, pretrained=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;).eval()
+labels = [l.strip() &lt;span class=&quot;kw&quot;&gt;for&lt;/span&gt; l &lt;span class=&quot;kw&quot;&gt;in&lt;/span&gt; requests.get(&lt;span class=&quot;st&quot;&gt;&quot;https://git.io/JJkYN&quot;&lt;/span&gt;).text.split(&lt;span class=&quot;st&quot;&gt;&quot;\n&quot;&lt;/span&gt;) &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; l.strip()]
+
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize([&lt;span class=&quot;fn&quot;&gt;0.485&lt;/span&gt;, &lt;span class=&quot;fn&quot;&gt;0.456&lt;/span&gt;, &lt;span class=&quot;fn&quot;&gt;0.406&lt;/span&gt;], [&lt;span class=&quot;fn&quot;&gt;0.229&lt;/span&gt;, &lt;span class=&quot;fn&quot;&gt;0.224&lt;/span&gt;, &lt;span class=&quot;fn&quot;&gt;0.225&lt;/span&gt;])
+])
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;predict&lt;/span&gt;(inp):
+    inp = transform(inp).unsqueeze(&lt;span class=&quot;fn&quot;&gt;0&lt;/span&gt;)
+    &lt;span class=&quot;kw&quot;&gt;with&lt;/span&gt; torch.no_grad():
+        prediction = torch.nn.functional.softmax(model(inp)[&lt;span class=&quot;fn&quot;&gt;0&lt;/span&gt;], dim=&lt;span class=&quot;fn&quot;&gt;0&lt;/span&gt;)
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; {labels[i]: float(prediction[i]) &lt;span class=&quot;kw&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;kw&quot;&gt;in&lt;/span&gt; range(len(labels))}
+
+gr.Interface(
+    fn=predict,
+    inputs=gr.Image(type=&lt;span class=&quot;st&quot;&gt;&quot;pil&quot;&lt;/span&gt;),
+    outputs=gr.Label(num_top_classes=&lt;span class=&quot;fn&quot;&gt;3&lt;/span&gt;),
+    examples=[&lt;span class=&quot;st&quot;&gt;&quot;/content/lion.jpg&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;/content/cheetah.jpg&quot;&lt;/span&gt;]
+).launch()&lt;/div&gt;
+  &lt;div class=&quot;callout&quot;&gt;&lt;b&gt;Why softmax:&lt;/b&gt; it converts raw model logits into probabilities that sum to 1, so &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:14px&quot;&gt;Label&lt;/span&gt; can display meaningful confidence scores.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ GRADIO + LLM ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;07 — Gradio + watsonx.ai&lt;/div&gt;
+  &lt;h2&gt;Wrapping an LLM in a chat interface&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;Same three-part pattern as any Gradio app: initialize the model, define the response function, build the interface.&lt;/p&gt;
+
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai.foundation_models &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; ModelInference
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai.metanames &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; GenTextParamsMetaNames &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; GenParams
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; Credentials
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain_ibm &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; WatsonxLLM
+&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; gradio &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; gr
+
+model_id = &lt;span class=&quot;st&quot;&gt;&#x27;mistralai/mistral-medium-2505&#x27;&lt;/span&gt;
+
+parameters = {
+    GenParams.MAX_NEW_TOKENS: &lt;span class=&quot;fn&quot;&gt;256&lt;/span&gt;,
+    GenParams.TEMPERATURE: &lt;span class=&quot;fn&quot;&gt;0.5&lt;/span&gt;,
+}
+
+project_id = &lt;span class=&quot;st&quot;&gt;&quot;skills-network&quot;&lt;/span&gt;
+
+watsonx_llm = WatsonxLLM(
+    model_id=model_id,
+    url=&lt;span class=&quot;st&quot;&gt;&quot;https://us-south.ml.cloud.ibm.com&quot;&lt;/span&gt;,
+    project_id=project_id,
+    params=parameters,
+)
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;generate_response&lt;/span&gt;(prompt_txt):
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; watsonx_llm.invoke(prompt_txt)
+
+chat_application = gr.Interface(
+    fn=generate_response,
+    inputs=gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Input&quot;&lt;/span&gt;, lines=&lt;span class=&quot;fn&quot;&gt;2&lt;/span&gt;, placeholder=&lt;span class=&quot;st&quot;&gt;&quot;Type your question here...&quot;&lt;/span&gt;),
+    outputs=gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Output&quot;&lt;/span&gt;),
+    title=&lt;span class=&quot;st&quot;&gt;&quot;Watsonx.ai Chatbot&quot;&lt;/span&gt;,
+    description=&lt;span class=&quot;st&quot;&gt;&quot;Ask any question and the chatbot will try to answer.&quot;&lt;/span&gt;
+)
+chat_application.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, server_port=&lt;span class=&quot;fn&quot;&gt;7860&lt;/span&gt;)&lt;/div&gt;
+
+  &lt;div class=&quot;warn&quot;&gt;&lt;b&gt;Troubleshooting — truncated answers:&lt;/b&gt; if responses cut off mid-sentence, the model is likely hitting its output cap. Check &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:14px&quot;&gt;GenParams.MAX_NEW_TOKENS&lt;/span&gt; (256 here) and raise it to allow longer generations.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ GLOSSARY ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;08 — Reference&lt;/div&gt;
+  &lt;h2&gt;Glossary&lt;/h2&gt;
+  &lt;dl class=&quot;gloss&quot;&gt;
+    &lt;dt&gt;gr.Interface&lt;/dt&gt;&lt;dd&gt;The core class that wraps a Python function with input/output UI components.&lt;/dd&gt;
+    &lt;dt&gt;fn&lt;/dt&gt;&lt;dd&gt;The wrapped function; its parameters map to inputs, its return value(s) map to outputs.&lt;/dd&gt;
+    &lt;dt&gt;launch()&lt;/dt&gt;&lt;dd&gt;Starts the local web server hosting the interface.&lt;/dd&gt;
+    &lt;dt&gt;share=True&lt;/dt&gt;&lt;dd&gt;Generates a public URL so others can use the app while it runs on your machine.&lt;/dd&gt;
+    &lt;dt&gt;Label output&lt;/dt&gt;&lt;dd&gt;Displays predicted class probabilities; &lt;span style=&quot;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:13px&quot;&gt;num_top_classes&lt;/span&gt; limits how many are shown.&lt;/dd&gt;
+    &lt;dt&gt;MAX_NEW_TOKENS&lt;/dt&gt;&lt;dd&gt;Generation parameter capping output length — the usual cause of truncated LLM responses.&lt;/dd&gt;
+  &lt;/dl&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ RECAP ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;09 — Recap&lt;/div&gt;
+  &lt;h2&gt;One-paragraph summary&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;Gradio wraps any Python function — text processing, image models, or an LLM call — in a web interface built from input/output components, launched with a single method and reachable through a local or public URL. Combined with the RAG pipeline from Module 1, it&#x27;s the layer that turns a working notebook into an app someone can actually type questions into.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;div class=&quot;footer-note&quot;&gt;Module 2 complete — ready for Module 3 →&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" title="Module 2 — Gradio"></iframe>
+</div>
+
+<div class="module-block">
+  <iframe id="mod2" class="module-frame" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;LlamaIndex &amp; Icebreaker Bot — Module 3&lt;/title&gt;
+&lt;style&gt;
+  :root{
+    --paper:#F6F3EC;
+    --paper-raised:#FFFFFF;
+    --ink:#1B2430;
+    --ink-soft:#4B5563;
+    --teal:#1F6F64;
+    --teal-soft:#DCEDE9;
+    --amber:#B5651D;
+    --amber-soft:#F3E3D3;
+    --line:#DDD6C8;
+    --code-bg:#1B2430;
+    --code-text:#E7E2D6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,Palatino,Georgia,serif;line-height:1.6;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 32px 120px;}
+
+  .cover{padding:90px 32px 70px;max-width:880px;margin:0 auto;border-bottom:2px solid var(--ink);}
+  .eyebrow{font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:18px;}
+  h1.title{font-family:&#x27;Iowan Old Style&#x27;,&#x27;Palatino Linotype&#x27;,Georgia,serif;font-size:52px;line-height:1.08;margin:0 0 14px;font-weight:700;letter-spacing:-0.5px;}
+  .subtitle{font-size:19px;color:var(--ink-soft);max-width:600px;margin-bottom:34px;font-style:italic;}
+  .meta-row{display:flex;gap:28px;flex-wrap:wrap;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;color:var(--ink-soft);}
+  .meta-row div span{display:block;color:var(--ink);font-size:13px;margin-top:3px;}
+  .vec-motif{margin-top:36px;}
+
+  section{padding:56px 0;border-bottom:1px solid var(--line);}
+  section:last-child{border-bottom:none;}
+  .sec-label{font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;margin-bottom:10px;}
+  h2{font-size:30px;margin:0 0 20px;letter-spacing:-.3px;}
+  h3{font-size:20px;margin:30px 0 10px;color:var(--ink);}
+  h4{font-size:16.5px;margin:22px 0 6px;color:var(--teal);}
+  p{font-size:16.5px;color:var(--ink);margin:0 0 14px;}
+  .lede{font-size:18px;color:var(--ink-soft);max-width:680px;}
+  code.inline{font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:14px;background:var(--teal-soft);padding:1px 6px;border-radius:3px;}
+
+  ul.points{margin:0 0 18px;padding-left:0;list-style:none;}
+  ul.points li{position:relative;padding-left:26px;margin-bottom:10px;font-size:16px;}
+  ul.points li::before{content:&quot;→&quot;;position:absolute;left:0;color:var(--teal);font-weight:700;}
+
+  .callout{background:var(--teal-soft);border-left:3px solid var(--teal);padding:16px 20px;border-radius:2px;margin:20px 0;font-size:15.5px;}
+  .callout b{color:var(--teal);}
+  .warn{background:var(--amber-soft);border-left:3px solid var(--amber);padding:16px 20px;border-radius:2px;margin:20px 0;font-size:15.5px;}
+  .warn b{color:var(--amber);}
+
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14.5px;}
+  th{text-align:left;font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);padding:10px 12px;border-bottom:2px solid var(--ink);}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr td:first-child{font-weight:600;white-space:nowrap;}
+
+  .code-block{background:var(--code-bg);color:var(--code-text);border-radius:8px;padding:18px 20px;margin:14px 0 22px;overflow-x:auto;font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,Menlo,Consolas,monospace;font-size:12.8px;line-height:1.62;white-space:pre-wrap;}
+  .cm{color:#8B94A3;} .kw{color:#7FB7E8;} .st{color:#C6E29B;} .fn{color:#E6B673;}
+
+  .step{display:flex;gap:18px;padding:18px 0;border-top:1px solid var(--line);}
+  .step:first-of-type{border-top:none;}
+  .step-num{font-family:&#x27;Iowan Old Style&#x27;,Georgia,serif;font-size:26px;color:var(--teal);min-width:42px;font-weight:700;}
+  .step-body h4{margin:0 0 6px;font-size:17px;color:var(--ink);}
+  .step-body p{margin:0;font-size:15px;color:var(--ink-soft);}
+
+  .gloss{display:grid;grid-template-columns:190px 1fr;gap:6px 20px;font-size:15px;margin-top:10px;}
+  .gloss dt{font-weight:700;color:var(--teal);padding:10px 0;border-top:1px solid var(--line);}
+  .gloss dd{margin:0;padding:10px 0;border-top:1px solid var(--line);color:var(--ink-soft);}
+
+  /* File-card treatment for the icebreaker bot walkthrough */
+  .filecard{border:1px solid var(--line);border-radius:10px;padding:24px 26px;margin:24px 0 34px;background:var(--paper-raised);}
+  .filecard-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .filecard-head .fname{font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:15px;color:var(--ink);font-weight:700;}
+  .filecard-head .ftag{font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber);padding:2px 8px;border-radius:20px;}
+  .filecard .purpose{font-size:15.5px;color:var(--ink-soft);margin-bottom:14px;}
+  .filecard .whatsleft{font-size:14px;color:var(--ink-soft);}
+  .whystep{margin:10px 0 0;padding-left:0;list-style:none;font-size:14.5px;}
+  .whystep li{padding-left:20px;position:relative;margin-bottom:6px;}
+  .whystep li::before{content:&quot;•&quot;;color:var(--teal);position:absolute;left:0;}
+
+  .footer-note{font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:12px;color:var(--ink-soft);text-align:center;padding:40px 0 0;}
+  svg text{font-family:&#x27;JetBrains Mono&#x27;,ui-monospace,Menlo,monospace;}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div class=&quot;cover&quot;&gt;
+  &lt;div class=&quot;eyebrow&quot;&gt;IBM · RAG SYSTEMS · SKILLS NETWORK&lt;/div&gt;
+  &lt;h1 class=&quot;title&quot;&gt;LlamaIndex &amp;amp;&lt;br&gt;the Icebreaker Bot&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Module 3 field notes — LlamaIndex&#x27;s take on RAG, how it stacks up against LangChain, and a guided build of a LinkedIn-profile chatbot.&lt;/div&gt;
+  &lt;div class=&quot;meta-row&quot;&gt;
+    &lt;div&gt;FRAMEWORK&lt;span&gt;LlamaIndex + watsonx.ai&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;PROJECT&lt;span&gt;LinkedIn Icebreaker Bot&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;INTERFACE&lt;span&gt;CLI + Gradio&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;vec-motif&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 820 130&quot; width=&quot;100%&quot; height=&quot;130&quot;&gt;
+      &lt;rect x=&quot;20&quot; y=&quot;42&quot; width=&quot;140&quot; height=&quot;46&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+      &lt;text x=&quot;90&quot; y=&quot;70&quot; text-anchor=&quot;middle&quot; font-size=&quot;12.5&quot; fill=&quot;var(--ink)&quot;&gt;Document&lt;/text&gt;
+      &lt;line x1=&quot;160&quot; y1=&quot;65&quot; x2=&quot;225&quot; y2=&quot;65&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrM3)&quot;/&gt;
+      &lt;rect x=&quot;230&quot; y=&quot;42&quot; width=&quot;110&quot; height=&quot;46&quot; rx=&quot;6&quot; fill=&quot;var(--teal-soft)&quot; stroke=&quot;var(--teal)&quot;/&gt;
+      &lt;text x=&quot;285&quot; y=&quot;70&quot; text-anchor=&quot;middle&quot; font-size=&quot;12.5&quot;&gt;Node&lt;/text&gt;
+      &lt;line x1=&quot;340&quot; y1=&quot;65&quot; x2=&quot;405&quot; y2=&quot;65&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrM3)&quot;/&gt;
+      &lt;rect x=&quot;410&quot; y=&quot;42&quot; width=&quot;150&quot; height=&quot;46&quot; rx=&quot;6&quot; fill=&quot;var(--paper-raised)&quot; stroke=&quot;var(--ink)&quot;/&gt;
+      &lt;text x=&quot;485&quot; y=&quot;70&quot; text-anchor=&quot;middle&quot; font-size=&quot;12.5&quot;&gt;VectorStoreIndex&lt;/text&gt;
+      &lt;line x1=&quot;560&quot; y1=&quot;65&quot; x2=&quot;625&quot; y2=&quot;65&quot; stroke=&quot;var(--ink)&quot; stroke-width=&quot;1.5&quot; marker-end=&quot;url(#arrM3)&quot;/&gt;
+      &lt;rect x=&quot;630&quot; y=&quot;42&quot; width=&quot;150&quot; height=&quot;46&quot; rx=&quot;6&quot; fill=&quot;var(--amber-soft)&quot; stroke=&quot;var(--amber)&quot;/&gt;
+      &lt;text x=&quot;705&quot; y=&quot;70&quot; text-anchor=&quot;middle&quot; font-size=&quot;12.5&quot; fill=&quot;var(--amber)&quot;&gt;Query Engine&lt;/text&gt;
+      &lt;defs&gt;&lt;marker id=&quot;arrM3&quot; markerWidth=&quot;8&quot; markerHeight=&quot;8&quot; refX=&quot;6&quot; refY=&quot;4&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0,0 L8,4 L0,8 Z&quot; fill=&quot;var(--ink)&quot;/&gt;&lt;/marker&gt;&lt;/defs&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;wrap&quot;&gt;
+
+&lt;!-- ============ WHAT IS LLAMAINDEX ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;01 — Definition&lt;/div&gt;
+  &lt;h2&gt;What is LlamaIndex?&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;A framework for LLM-powered &lt;b&gt;context augmentation&lt;/b&gt; — making your own data available to an LLM so it grounds its answers in that data instead of guessing.&lt;/p&gt;
+  &lt;ul class=&quot;points&quot;&gt;
+    &lt;li&gt;Open-source, available in Python and TypeScript.&lt;/li&gt;
+    &lt;li&gt;Typical use cases: RAG-based question answering, chatbots that handle back-and-forth follow-ups, and document understanding / structured data extraction.&lt;/li&gt;
+    &lt;li&gt;Compared to LangChain, LlamaIndex favors strong native defaults and less boilerplate; LangChain favors modularity and breadth of integrations.&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class=&quot;callout&quot;&gt;&lt;b&gt;Mental model:&lt;/b&gt; Document → Node → VectorStoreIndex → Retriever/Query Engine → Response. Everything below fills in this chain.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ RAG STAGES ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;02 — Overview&lt;/div&gt;
+  &lt;h2&gt;The five RAG stages, LlamaIndex&#x27;s way&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;This module focuses on the first four — Loading, Splitting, Indexing, and Querying are where nearly all of the actual code lives.&lt;/p&gt;
+
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;1&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Loading&lt;/h4&gt;&lt;p&gt;Import data from any source — text, PDFs, websites, databases, APIs — via LlamaIndex&#x27;s built-in readers or LlamaHub connectors.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;2&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Splitting&lt;/h4&gt;&lt;p&gt;Break loaded data into smaller chunks (&quot;Nodes&quot;) — fixed-size, semantic, or recursive character splitting.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;3&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Indexing&lt;/h4&gt;&lt;p&gt;Convert nodes into vector embeddings and build a data structure (an Index) for fast, context-aware retrieval.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;4&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Storing&lt;/h4&gt;&lt;p&gt;Persist the index and its metadata so you don&#x27;t have to re-embed everything on every run.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;div class=&quot;step-num&quot;&gt;5&lt;/div&gt;
+    &lt;div class=&quot;step-body&quot;&gt;&lt;h4&gt;Querying &amp;amp; Evaluation&lt;/h4&gt;&lt;p&gt;Query via retrievers or query engines (sub-queries, multi-step, hybrid); evaluation measures accuracy, relevance, and speed of results.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ DOCUMENT &amp; NODE ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;03 — Core Classes&lt;/div&gt;
+  &lt;h2&gt;Document and Node&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;Both are containers with the same shape — a Node is simply what a Document becomes after chunking.&lt;/p&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Field&lt;/th&gt;&lt;th&gt;Holds&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;id&lt;/td&gt;&lt;td&gt;A unique identifier for the document/node&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;embedding&lt;/td&gt;&lt;td&gt;Placeholder for the vector, if the whole item is embedded&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;metadata&lt;/td&gt;&lt;td&gt;Dict of extra info — origin, creation date, etc.&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;relationships&lt;/td&gt;&lt;td&gt;Dict linking this item to other documents/nodes&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;text&lt;/td&gt;&lt;td&gt;The actual text content&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+
+  &lt;h3&gt;Creating a Document&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; Document
+
+doc = Document(text=&lt;span class=&quot;st&quot;&gt;&quot;Hello LlamaIndex&quot;&lt;/span&gt;)
+print(doc.dict())  &lt;span class=&quot;cm&quot;&gt;# inspect id, embedding, metadata, relationships, text&lt;/span&gt;&lt;/div&gt;
+
+  &lt;h3&gt;Loading a directory — SimpleDirectoryReader&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; SimpleDirectoryReader
+
+&lt;span class=&quot;cm&quot;&gt;# load every supported file in a folder&lt;/span&gt;
+documents = SimpleDirectoryReader(&lt;span class=&quot;st&quot;&gt;&quot;./data&quot;&lt;/span&gt;).load_data()
+
+&lt;span class=&quot;cm&quot;&gt;# include subdirectories&lt;/span&gt;
+documents = SimpleDirectoryReader(&lt;span class=&quot;st&quot;&gt;&quot;./data&quot;&lt;/span&gt;, recursive=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;).load_data()
+
+&lt;span class=&quot;cm&quot;&gt;# load specific files only&lt;/span&gt;
+documents = SimpleDirectoryReader(input_files=[&lt;span class=&quot;st&quot;&gt;&quot;a.pdf&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;b.md&quot;&lt;/span&gt;]).load_data()
+
+&lt;span class=&quot;cm&quot;&gt;# load only certain file types&lt;/span&gt;
+documents = SimpleDirectoryReader(&lt;span class=&quot;st&quot;&gt;&quot;./data&quot;&lt;/span&gt;, required_exts=[&lt;span class=&quot;st&quot;&gt;&quot;.pdf&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;.md&quot;&lt;/span&gt;]).load_data()&lt;/div&gt;
+  &lt;p style=&quot;font-size:14.5px;color:var(--ink-soft)&quot;&gt;Handles text, Markdown, CSV, PDF, Word, PowerPoint, and more out of the box; LlamaHub adds connectors for databases, cloud storage, and APIs.&lt;/p&gt;
+
+  &lt;h3&gt;Chunking — SentenceSplitter&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core.node_parser &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; SentenceSplitter
+
+splitter = SentenceSplitter(chunk_size=&lt;span class=&quot;fn&quot;&gt;500&lt;/span&gt;, chunk_overlap=&lt;span class=&quot;fn&quot;&gt;50&lt;/span&gt;)
+nodes = splitter.get_nodes_from_documents(documents)&lt;/div&gt;
+  &lt;p style=&quot;font-size:14.5px;color:var(--ink-soft)&quot;&gt;&lt;code class=&quot;inline&quot;&gt;chunk_size&lt;/code&gt; caps each chunk in tokens; &lt;code class=&quot;inline&quot;&gt;chunk_overlap&lt;/code&gt; caps how many tokens repeat between consecutive chunks. Splits recursively on newlines, then periods, etc. Other options: &lt;code class=&quot;inline&quot;&gt;SemanticSplitterNodeParser&lt;/code&gt; (splits on semantic similarity drops) and &lt;code class=&quot;inline&quot;&gt;LangChainNodeParser&lt;/code&gt; (wraps any LangChain splitter).&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ VECTOR STORE + QUERY ENGINE ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;04 — Embedding, Retrieval, Querying&lt;/div&gt;
+  &lt;h2&gt;VectorStoreIndex, retrievers, and query engines&lt;/h2&gt;
+
+  &lt;h3&gt;Simple: default model, in-memory&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; VectorStoreIndex
+
+index = VectorStoreIndex(nodes)&lt;/div&gt;
+
+  &lt;h3&gt;Custom embedding model + persistent storage (ChromaDB)&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; chromadb
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.embeddings.huggingface &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; HuggingFaceEmbedding
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; VectorStoreIndex, StorageContext
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.vector_stores.chroma &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; ChromaVectorStore
+
+embed_model = HuggingFaceEmbedding(model_name=&lt;span class=&quot;st&quot;&gt;&quot;BAAI/bge-small-en-v1.5&quot;&lt;/span&gt;)
+
+chroma_client = chromadb.PersistentClient(path=&lt;span class=&quot;st&quot;&gt;&quot;./chroma_db&quot;&lt;/span&gt;)
+vector_store = ChromaVectorStore(chroma_collection=chroma_client.get_or_create_collection(&lt;span class=&quot;st&quot;&gt;&quot;profiles&quot;&lt;/span&gt;))
+storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
+index = VectorStoreIndex(
+    nodes,
+    embed_model=embed_model,
+    storage_context=storage_context
+)&lt;/div&gt;
+
+  &lt;h3&gt;Retriever — just the retrieval step&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;retriever = index.as_retriever(similarity_top_k=&lt;span class=&quot;fn&quot;&gt;5&lt;/span&gt;)
+results = retriever.retrieve(&lt;span class=&quot;st&quot;&gt;&quot;What did they study?&quot;&lt;/span&gt;)  &lt;span class=&quot;cm&quot;&gt;# ranked list, most similar first&lt;/span&gt;&lt;/div&gt;
+
+  &lt;h3&gt;Response synthesizer — retrieval already done, just generate&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; get_response_synthesizer
+
+synthesizer = get_response_synthesizer()
+response = synthesizer.synthesize(&lt;span class=&quot;st&quot;&gt;&quot;What did they study?&quot;&lt;/span&gt;, nodes=results)&lt;/div&gt;
+
+  &lt;h3&gt;Query engine — the whole thing in one call&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;query_engine = index.as_query_engine()
+response = query_engine.query(&lt;span class=&quot;st&quot;&gt;&quot;What did they study?&quot;&lt;/span&gt;)&lt;/div&gt;
+  &lt;div class=&quot;callout&quot;&gt;&lt;b&gt;Customization points:&lt;/b&gt; swap the default LLM, pass a custom &lt;code class=&quot;inline&quot;&gt;PromptTemplate&lt;/code&gt;, or supply a custom retriever — all via arguments to &lt;code class=&quot;inline&quot;&gt;as_query_engine()&lt;/code&gt;.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ LANGCHAIN VS LLAMAINDEX ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;05 — Comparison&lt;/div&gt;
+  &lt;h2&gt;LangChain vs. LlamaIndex, stage by stage&lt;/h2&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;RAG Stage&lt;/th&gt;&lt;th&gt;LangChain&lt;/th&gt;&lt;th&gt;LlamaIndex&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Load docs&lt;/td&gt;&lt;td&gt;Many focused loaders (TextLoader, CSVLoader, WebBaseLoader…) + DirectoryLoader&lt;/td&gt;&lt;td&gt;One powerful &lt;code class=&quot;inline&quot;&gt;SimpleDirectoryReader&lt;/code&gt; handles most formats natively; LlamaHub for the rest&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Chunk&lt;/td&gt;&lt;td&gt;CharacterTextSplitter, TokenTextSplitter, RecursiveCharacterTextSplitter, structure-aware splitters, SemanticChunker&lt;/td&gt;&lt;td&gt;SentenceSplitter (token-based recursive default), file-based node parsers, SemanticSplitterNodeParser, or wrap any LangChain splitter&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Embed&lt;/td&gt;&lt;td&gt;Embed, then store as a separate step&lt;/td&gt;&lt;td&gt;Embed + store combined in one &lt;code class=&quot;inline&quot;&gt;VectorStoreIndex&lt;/code&gt; call&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Retrieve&lt;/td&gt;&lt;td&gt;Similar top-k retrieval; advanced patterns like parent-document retriever&lt;/td&gt;&lt;td&gt;Similar top-k retrieval via &lt;code class=&quot;inline&quot;&gt;as_retriever()&lt;/code&gt;; advanced retrievers available&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Augment prompt&lt;/td&gt;&lt;td&gt;Separate, standalone step — easy to customize templates&lt;/td&gt;&lt;td&gt;Bundled into the response synthesizer / query engine — slightly harder to customize&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Call the LLM&lt;/td&gt;&lt;td&gt;Manual: &lt;code class=&quot;inline&quot;&gt;llm.invoke(messages)&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Bundled into synthesizer/query engine — no manual call needed&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;p&gt;&lt;b&gt;In short:&lt;/b&gt; LangChain wins on modularity, integrations, and step-by-step control. LlamaIndex wins on out-of-the-box simplicity and less code for standard RAG.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ ICEBREAKER BOT INTRO ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;06 — Project&lt;/div&gt;
+  &lt;h2&gt;Building the LinkedIn Icebreaker Bot&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;A RAG-powered tool that takes a LinkedIn profile and generates personalized conversation starters — built on LlamaIndex + IBM watsonx.&lt;/p&gt;
+  &lt;ul class=&quot;points&quot;&gt;
+    &lt;li&gt;Extracts profile data (mock JSON, or the ProxyCurl API for real profiles).&lt;/li&gt;
+    &lt;li&gt;Splits it into nodes, embeds them, and stores them in a vector index.&lt;/li&gt;
+    &lt;li&gt;Generates initial &quot;interesting facts,&quot; then supports open-ended follow-up questions grounded in that same profile.&lt;/li&gt;
+    &lt;li&gt;Ships as both a CLI tool and a Gradio web app.&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class=&quot;warn&quot;&gt;&lt;b&gt;Note on the code below:&lt;/b&gt; the project is a starter template — most functions are stubbed with &lt;code class=&quot;inline&quot;&gt;TODO&lt;/code&gt; comments and a placeholder return value. The explanations describe what each function is meant to do once implemented, not a finished behavior.&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ FILE 1: config.py ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;07 — Code Walkthrough&lt;/div&gt;
+  &lt;h2&gt;File-by-file breakdown&lt;/h2&gt;
+
+  &lt;div class=&quot;filecard&quot;&gt;
+    &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;config.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Settings&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot;&gt;Central place for every constant the app needs — model IDs, API settings, generation parameters, and the two prompt templates. Every other module imports from here instead of hardcoding values.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;Configuration settings for the Icebreaker Bot.&quot;&quot;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;# IBM watsonx.ai settings&lt;/span&gt;
+WATSONX_URL = &lt;span class=&quot;st&quot;&gt;&quot;https://us-south.ml.cloud.ibm.com&quot;&lt;/span&gt;
+WATSONX_PROJECT_ID = &lt;span class=&quot;st&quot;&gt;&quot;skills-network&quot;&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;# Model settings&lt;/span&gt;
+LLM_MODEL_ID = &lt;span class=&quot;st&quot;&gt;&quot;ibm/granite-4-h-small&quot;&lt;/span&gt;
+EMBEDDING_MODEL_ID = &lt;span class=&quot;st&quot;&gt;&quot;ibm/slate-125m-english-rtrvr-v2&quot;&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;# ProxyCurl API settings&lt;/span&gt;
+PROXYCURL_API_KEY = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&lt;/span&gt;  &lt;span class=&quot;cm&quot;&gt;# Replace with your API key&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;# Mock data URL&lt;/span&gt;
+MOCK_DATA_URL = &lt;span class=&quot;st&quot;&gt;&quot;https://.../linkedin-profile-data.json&quot;&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;# Query settings&lt;/span&gt;
+SIMILARITY_TOP_K = &lt;span class=&quot;fn&quot;&gt;7&lt;/span&gt;
+TEMPERATURE = &lt;span class=&quot;fn&quot;&gt;0.0&lt;/span&gt;
+MAX_NEW_TOKENS = &lt;span class=&quot;fn&quot;&gt;500&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;# Node settings&lt;/span&gt;
+CHUNK_SIZE = &lt;span class=&quot;fn&quot;&gt;500&lt;/span&gt;
+
+INITIAL_FACTS_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...list 3 interesting facts... {context_str} ...&quot;&quot;&quot;&lt;/span&gt;
+USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{context_str}... Question: {query_str} ...&quot;&quot;&quot;&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot; style=&quot;margin-top:6px&quot;&gt;&lt;b&gt;Why it&#x27;s structured this way:&lt;/b&gt; &lt;code class=&quot;inline&quot;&gt;SIMILARITY_TOP_K&lt;/code&gt; and &lt;code class=&quot;inline&quot;&gt;CHUNK_SIZE&lt;/code&gt; tune retrieval precision vs. recall; &lt;code class=&quot;inline&quot;&gt;TEMPERATURE = 0.0&lt;/code&gt; keeps facts generation deterministic; the two prompt templates use &lt;code class=&quot;inline&quot;&gt;{context_str}&lt;/code&gt; (retrieved nodes) and &lt;code class=&quot;inline&quot;&gt;{query_str}&lt;/code&gt; (user question) as placeholders that get filled in at augmentation time.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FILE 2 --&gt;
+  &lt;div class=&quot;filecard&quot;&gt;
+    &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;modules/data_extraction.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Loading&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot;&gt;Corresponds to RAG stage 1 — getting raw profile data into the pipeline, either from a mock JSON file or a real API.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;extract_linkedin_profile&lt;/span&gt;(linkedin_profile_url, api_key=&lt;span class=&quot;kw&quot;&gt;None&lt;/span&gt;, mock=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. If mock is True, load data from the mock URL in config.py&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. If mock is False, use the ProxyCurl API to extract the profile data&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Clean the data by removing empty values and unwanted fields&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 4. Return the cleaned data as a dictionary&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; {}&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot; style=&quot;margin-top:6px&quot;&gt;&lt;b&gt;What it&#x27;s meant to do:&lt;/b&gt; a single function with two paths — &lt;code class=&quot;inline&quot;&gt;mock=True&lt;/code&gt; fetches a pre-made JSON so the app works with zero API cost; &lt;code class=&quot;inline&quot;&gt;mock=False&lt;/code&gt; calls ProxyCurl for a real, live profile. Either way it returns the same shaped dictionary, so nothing downstream needs to know which path was used.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FILE 3 --&gt;
+  &lt;div class=&quot;filecard&quot;&gt;
+    &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;modules/data_processing.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Splitting + Indexing&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot;&gt;Covers RAG stages 2–3: turning raw profile JSON into Nodes, then into a queryable vector index.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; Document, VectorStoreIndex
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core.node_parser &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; SentenceSplitter
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; modules.llm_interface &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; create_watsonx_embedding
+&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; config
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;split_profile_data&lt;/span&gt;(profile_data):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Convert the profile data to a JSON string&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Create a Document object from the JSON string&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Split the document into nodes using SentenceSplitter&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 4. Return the nodes&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; []
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_vector_database&lt;/span&gt;(nodes):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Get the embedding model using create_watsonx_embedding()&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Create a VectorStoreIndex from the nodes&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Return the index&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;None&lt;/span&gt;
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;verify_embeddings&lt;/span&gt;(index):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Get the vector store from the index&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Get the node IDs from the index&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Check if each node has a valid embedding&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 4. Return True if all embeddings are valid, False otherwise&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;&lt;/div&gt;
+    &lt;ul class=&quot;whystep&quot;&gt;
+      &lt;li&gt;&lt;b&gt;split_profile_data&lt;/b&gt; — the whole profile (JSON) becomes one &lt;code class=&quot;inline&quot;&gt;Document&lt;/code&gt;, then &lt;code class=&quot;inline&quot;&gt;SentenceSplitter&lt;/code&gt; (using &lt;code class=&quot;inline&quot;&gt;config.CHUNK_SIZE&lt;/code&gt;) breaks it into Nodes small enough for precise retrieval.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;create_vector_database&lt;/b&gt; — wraps the nodes in a &lt;code class=&quot;inline&quot;&gt;VectorStoreIndex&lt;/code&gt; using the watsonx embedding model, so the profile becomes searchable by meaning, not just keywords.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;verify_embeddings&lt;/b&gt; — a sanity check: confirms every node actually got a vector before the app trusts the index for retrieval.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FILE 4 --&gt;
+  &lt;div class=&quot;filecard&quot;&gt;
+    &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;modules/llm_interface.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Model Setup&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot;&gt;Wraps IBM watsonx model creation so the rest of the app never has to touch credentials or SDK details directly.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.embeddings.ibm &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; WatsonxEmbeddings
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.llms.ibm &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; WatsonxLLM
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai.foundation_models.utils.enums &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; DecodingMethods
+&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; config
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_watsonx_embedding&lt;/span&gt;():
+    &lt;span class=&quot;cm&quot;&gt;# TODO: Create and return a WatsonxEmbeddings model using config values&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;pass&lt;/span&gt;
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_watsonx_llm&lt;/span&gt;(temperature=&lt;span class=&quot;fn&quot;&gt;0.0&lt;/span&gt;, max_new_tokens=&lt;span class=&quot;fn&quot;&gt;500&lt;/span&gt;, decoding_method=&lt;span class=&quot;st&quot;&gt;&quot;sample&quot;&lt;/span&gt;):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Define additional parameters for the LLM&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Create and return a WatsonxLLM model using config values and parameters&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;pass&lt;/span&gt;
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;change_llm_model&lt;/span&gt;(new_model_id):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Update the LLM model ID in the config&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Log the change&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;pass&lt;/span&gt;&lt;/div&gt;
+    &lt;ul class=&quot;whystep&quot;&gt;
+      &lt;li&gt;&lt;b&gt;create_watsonx_embedding&lt;/b&gt; — the embedding model used both when indexing the profile and when embedding user questions, so both vectors live in the same space.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;create_watsonx_llm&lt;/b&gt; — the generation model, parameterized by temperature/token limits so callers can request &quot;deterministic facts&quot; vs. &quot;creative chat&quot; behavior.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;change_llm_model&lt;/b&gt; — lets the Gradio UI&#x27;s model dropdown swap models at runtime without restarting the app.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FILE 5 --&gt;
+  &lt;div class=&quot;filecard&quot;&gt;
+    &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;modules/query_engine.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Augmentation + Generation&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot;&gt;Covers the final RAG stages — combining retrieved context with a prompt template, then asking the LLM for a response.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; VectorStoreIndex, PromptTemplate
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; modules.llm_interface &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; create_watsonx_llm
+&lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; config
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;generate_initial_facts&lt;/span&gt;(index):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Create a Watsonx LLM for generating facts&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Create a prompt template for facts generation&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Create a query engine with the LLM and prompt template&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 4. Execute the query to generate facts&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 5. Return the generated facts&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;st&quot;&gt;&quot;Facts will be generated here.&quot;&lt;/span&gt;
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;answer_user_query&lt;/span&gt;(index, user_query):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Create a Watsonx LLM for answering questions&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Create a prompt template for question answering&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Retrieve relevant nodes from the index&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 4. Build context string from retrieved nodes&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 5. Create a query engine with the LLM and prompt template&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 6. Execute the query to generate answer&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 7. Return the answer&lt;/span&gt;
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;st&quot;&gt;&quot;Answers will be generated here.&quot;&lt;/span&gt;&lt;/div&gt;
+    &lt;ul class=&quot;whystep&quot;&gt;
+      &lt;li&gt;&lt;b&gt;generate_initial_facts&lt;/b&gt; — uses &lt;code class=&quot;inline&quot;&gt;config.INITIAL_FACTS_TEMPLATE&lt;/code&gt; against the whole indexed profile to produce the opening &quot;3 interesting facts&quot; — this is what greets the user right after processing.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;answer_user_query&lt;/b&gt; — uses &lt;code class=&quot;inline&quot;&gt;config.USER_QUESTION_TEMPLATE&lt;/code&gt;, retrieving only the &lt;code class=&quot;inline&quot;&gt;SIMILARITY_TOP_K&lt;/code&gt; most relevant nodes for the specific question rather than the whole profile — the actual per-question RAG step.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FILE 6 --&gt;
+  &lt;div class=&quot;filecard&quot;&gt;
+    &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;app.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Gradio Web UI&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot;&gt;Wires every module above into a two-tab Gradio app: one tab to process a profile, one tab to chat about it.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;process_profile&lt;/span&gt;(linkedin_url, api_key, use_mock, selected_model):
+    &lt;span class=&quot;cm&quot;&gt;# Starter version: returns a placeholder message + a session ID.&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# When implemented: extract -&gt; split -&gt; embed/index -&gt; generate facts,&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# store the index in `active_indices[session_id]`.&lt;/span&gt;
+    ...
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;chat_with_profile&lt;/span&gt;(session_id, user_query, chat_history):
+    &lt;span class=&quot;cm&quot;&gt;# Starter version: guards for missing session/query, otherwise echoes.&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# When implemented: looks up the index for session_id and calls&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# answer_user_query(index, user_query), appends to chat_history.&lt;/span&gt;
+    ...
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_gradio_interface&lt;/span&gt;():
+    &lt;span class=&quot;kw&quot;&gt;with&lt;/span&gt; gr.Blocks(title=&lt;span class=&quot;st&quot;&gt;&quot;LinkedIn Icebreaker Bot&quot;&lt;/span&gt;) &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; demo:
+        &lt;span class=&quot;kw&quot;&gt;with&lt;/span&gt; gr.Tab(&lt;span class=&quot;st&quot;&gt;&quot;Process LinkedIn Profile&quot;&lt;/span&gt;):
+            linkedin_url = gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;LinkedIn Profile URL&quot;&lt;/span&gt;)
+            api_key = gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;ProxyCurl API Key&quot;&lt;/span&gt;, type=&lt;span class=&quot;st&quot;&gt;&quot;password&quot;&lt;/span&gt;)
+            use_mock = gr.Checkbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Use Mock Data&quot;&lt;/span&gt;, value=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;)
+            model_dropdown = gr.Dropdown(choices=available_models, label=&lt;span class=&quot;st&quot;&gt;&quot;Select LLM Model&quot;&lt;/span&gt;)
+            process_btn = gr.Button(&lt;span class=&quot;st&quot;&gt;&quot;Process Profile&quot;&lt;/span&gt;)
+            result_text = gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Initial Facts&quot;&lt;/span&gt;, lines=&lt;span class=&quot;fn&quot;&gt;10&lt;/span&gt;)
+            session_id = gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Session ID&quot;&lt;/span&gt;, visible=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;)
+            process_btn.click(fn=process_profile,
+                               inputs=[linkedin_url, api_key, use_mock, model_dropdown],
+                               outputs=[result_text, session_id])
+
+        &lt;span class=&quot;kw&quot;&gt;with&lt;/span&gt; gr.Tab(&lt;span class=&quot;st&quot;&gt;&quot;Chat&quot;&lt;/span&gt;):
+            chatbot = gr.Chatbot(height=&lt;span class=&quot;fn&quot;&gt;500&lt;/span&gt;)
+            chat_input = gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Ask a question about the profile&quot;&lt;/span&gt;)
+            chat_btn = gr.Button(&lt;span class=&quot;st&quot;&gt;&quot;Send&quot;&lt;/span&gt;)
+            chat_btn.click(fn=chat_with_profile,
+                            inputs=[session_id, chat_input, chatbot],
+                            outputs=[chatbot])
+            chat_input.submit(fn=chat_with_profile,
+                               inputs=[session_id, chat_input, chatbot],
+                               outputs=[chatbot])
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; demo
+
+&lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; __name__ == &lt;span class=&quot;st&quot;&gt;&quot;__main__&quot;&lt;/span&gt;:
+    demo = create_gradio_interface()
+    demo.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, server_port=&lt;span class=&quot;fn&quot;&gt;5000&lt;/span&gt;, share=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;)&lt;/div&gt;
+    &lt;ul class=&quot;whystep&quot;&gt;
+      &lt;li&gt;&lt;b&gt;Tab 1 — Process:&lt;/b&gt; takes the URL/mock choice/model, and is meant to run the full pipeline (extract → split → index → verify → generate facts), returning the facts plus a &lt;code class=&quot;inline&quot;&gt;session_id&lt;/code&gt; so the profile&#x27;s index can be reused.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;Tab 2 — Chat:&lt;/b&gt; a &lt;code class=&quot;inline&quot;&gt;gr.Chatbot&lt;/code&gt; feeds each new question, along with the stored &lt;code class=&quot;inline&quot;&gt;session_id&lt;/code&gt;, into &lt;code class=&quot;inline&quot;&gt;chat_with_profile&lt;/code&gt; — this is the per-turn RAG query against the already-built index.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;active_indices dict:&lt;/b&gt; a simple in-memory session store mapping &lt;code class=&quot;inline&quot;&gt;session_id → VectorStoreIndex&lt;/code&gt;, so multiple users/profiles don&#x27;t collide.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;launch(..., share=True):&lt;/b&gt; exposes a public URL in addition to the local one — the same Gradio pattern from Module 2.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;!-- FILE 7 --&gt;
+  &lt;div class=&quot;filecard&quot;&gt;
+    &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;main.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Command-Line Interface&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;purpose&quot;&gt;The non-web entry point — runs the same pipeline as a terminal loop instead of a browser app.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;process_linkedin&lt;/span&gt;(linkedin_url, api_key=&lt;span class=&quot;kw&quot;&gt;None&lt;/span&gt;, mock=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Extract the profile data using extract_linkedin_profile&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Split the data into nodes using split_profile_data&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Create a vector database using create_vector_database&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 4. Verify embeddings using verify_embeddings&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 5. Generate initial facts using generate_initial_facts&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 6. Start the chatbot interface&lt;/span&gt;
+    print(&lt;span class=&quot;st&quot;&gt;&quot;Function not yet implemented.&quot;&lt;/span&gt;)
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;chatbot_interface&lt;/span&gt;(index):
+    &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Display instructions to the user&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Loop, reading user queries&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 3. Process each query using answer_user_query&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 4. Display the answer&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 5. Exit on &#x27;exit&#x27; / &#x27;quit&#x27; / &#x27;bye&#x27;&lt;/span&gt;
+    print(&lt;span class=&quot;st&quot;&gt;&quot;Chatbot interface not yet implemented.&quot;&lt;/span&gt;)
+
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;main&lt;/span&gt;():
+    parser = argparse.ArgumentParser(description=&lt;span class=&quot;st&quot;&gt;&#x27;Icebreaker Bot - LinkedIn Profile Analyzer&#x27;&lt;/span&gt;)
+    parser.add_argument(&lt;span class=&quot;st&quot;&gt;&#x27;--url&#x27;&lt;/span&gt;, type=str)
+    parser.add_argument(&lt;span class=&quot;st&quot;&gt;&#x27;--api-key&#x27;&lt;/span&gt;, type=str)
+    parser.add_argument(&lt;span class=&quot;st&quot;&gt;&#x27;--mock&#x27;&lt;/span&gt;, action=&lt;span class=&quot;st&quot;&gt;&#x27;store_true&#x27;&lt;/span&gt;)
+    parser.add_argument(&lt;span class=&quot;st&quot;&gt;&#x27;--model&#x27;&lt;/span&gt;, type=str)
+    args = parser.parse_args()
+
+    linkedin_url = args.url &lt;span class=&quot;kw&quot;&gt;or&lt;/span&gt; input(&lt;span class=&quot;st&quot;&gt;&quot;Enter LinkedIn profile URL (or press Enter to use mock data): &quot;&lt;/span&gt;)
+    use_mock = args.mock &lt;span class=&quot;kw&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;not&lt;/span&gt; linkedin_url
+    &lt;span class=&quot;cm&quot;&gt;# process_linkedin(linkedin_url, api_key, mock=use_mock)  # TODO: uncomment once implemented&lt;/span&gt;
+    print(&lt;span class=&quot;st&quot;&gt;&quot;This is a starter template. Implement the missing functions to make it work!&quot;&lt;/span&gt;)&lt;/div&gt;
+    &lt;ul class=&quot;whystep&quot;&gt;
+      &lt;li&gt;&lt;b&gt;process_linkedin&lt;/b&gt; — the CLI&#x27;s version of &lt;code class=&quot;inline&quot;&gt;app.py&lt;/code&gt;&#x27;s &quot;Process&quot; tab: runs the full extract → split → index → verify → facts pipeline, then hands off to the chatbot loop.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;chatbot_interface&lt;/b&gt; — a plain &lt;code class=&quot;inline&quot;&gt;while True&lt;/code&gt; input loop, the terminal equivalent of the Gradio Chat tab, calling &lt;code class=&quot;inline&quot;&gt;answer_user_query&lt;/code&gt; per line typed.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;main / argparse&lt;/b&gt; — lets you run the whole thing non-interactively, e.g. &lt;code class=&quot;inline&quot;&gt;python main.py --mock&lt;/code&gt;, useful for scripting or demos without touching the web UI.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ GLOSSARY ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;08 — Reference&lt;/div&gt;
+  &lt;h2&gt;Glossary&lt;/h2&gt;
+  &lt;dl class=&quot;gloss&quot;&gt;
+    &lt;dt&gt;Context augmentation&lt;/dt&gt;&lt;dd&gt;Making external data available to an LLM so responses are grounded in it.&lt;/dd&gt;
+    &lt;dt&gt;Document&lt;/dt&gt;&lt;dd&gt;LlamaIndex&#x27;s container for a whole source item — text plus id, embedding slot, metadata, relationships.&lt;/dd&gt;
+    &lt;dt&gt;Node&lt;/dt&gt;&lt;dd&gt;A chunk of a Document, same structure, produced by a splitter like SentenceSplitter.&lt;/dd&gt;
+    &lt;dt&gt;VectorStoreIndex&lt;/dt&gt;&lt;dd&gt;Class that embeds nodes and stores the vectors — in-memory by default, or wrapping Chroma/FAISS/Milvus.&lt;/dd&gt;
+    &lt;dt&gt;Retriever&lt;/dt&gt;&lt;dd&gt;Created via &lt;code class=&quot;inline&quot;&gt;index.as_retriever()&lt;/code&gt;; fetches the top-k most similar nodes to a query.&lt;/dd&gt;
+    &lt;dt&gt;Response synthesizer&lt;/dt&gt;&lt;dd&gt;Takes a query + already-retrieved nodes, augments the prompt, and generates the LLM response.&lt;/dd&gt;
+    &lt;dt&gt;Query engine&lt;/dt&gt;&lt;dd&gt;Created via &lt;code class=&quot;inline&quot;&gt;index.as_query_engine()&lt;/code&gt;; combines embedding, retrieval, augmentation, and generation into one call.&lt;/dd&gt;
+    &lt;dt&gt;LlamaHub&lt;/dt&gt;&lt;dd&gt;LlamaIndex&#x27;s registry of extra data connectors and loaders beyond the core library.&lt;/dd&gt;
+    &lt;dt&gt;ProxyCurl&lt;/dt&gt;&lt;dd&gt;Third-party API used by the Icebreaker Bot to fetch real LinkedIn profile data.&lt;/dd&gt;
+    &lt;dt&gt;Session ID&lt;/dt&gt;&lt;dd&gt;Key used by the Gradio app to keep each processed profile&#x27;s index separate per user/conversation.&lt;/dd&gt;
+  &lt;/dl&gt;
+&lt;/section&gt;
+
+&lt;!-- ============ RECAP ============ --&gt;
+&lt;section&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;09 — Recap&lt;/div&gt;
+  &lt;h2&gt;One-paragraph summary&lt;/h2&gt;
+  &lt;p class=&quot;lede&quot;&gt;LlamaIndex represents the RAG pipeline as a chain of simple classes — Document, Node, VectorStoreIndex, and Query Engine — trading some of LangChain&#x27;s granular control for far less boilerplate. The Icebreaker Bot applies that chain end to end: a LinkedIn profile becomes a Document, gets split into Nodes, is embedded into a VectorStoreIndex, and is queried — first to generate opening facts, then to answer free-form follow-up questions — through the same config-driven prompt templates, exposed via both a CLI and a Gradio web app.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;div class=&quot;footer-note&quot;&gt;Module 3 complete — ready for Module 4 →&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" title="Module 3 — LlamaIndex &amp; Icebreaker Bot"></iframe>
+</div>
+
+<script>
+
+document.getElementById('mod0').addEventListener('load', function() {
+  var f = this;
+  try {
+    var h = f.contentWindow.document.documentElement.scrollHeight;
+    f.style.height = (h + 20) + 'px';
+  } catch (e) {}
+});
+
+document.getElementById('mod1').addEventListener('load', function() {
+  var f = this;
+  try {
+    var h = f.contentWindow.document.documentElement.scrollHeight;
+    f.style.height = (h + 20) + 'px';
+  } catch (e) {}
+});
+
+document.getElementById('mod2').addEventListener('load', function() {
+  var f = this;
+  try {
+    var h = f.contentWindow.document.documentElement.scrollHeight;
+    f.style.height = (h + 20) + 'px';
+  } catch (e) {}
+});
+</script>
+
+</body>
+</html>
