@@ -164,7 +164,7 @@
   &lt;div class=&quot;meta-row&quot;&gt;
     &lt;div&gt;PIPELINE&lt;span&gt;8 stages&lt;/span&gt;&lt;/div&gt;
     &lt;div&gt;CORE IDEA&lt;span&gt;Retrieve → Augment → Generate&lt;/span&gt;&lt;/div&gt;
-    &lt;div&gt;FRAMEWORK&lt;span&gt;LangChain + watsonx.ai&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;FRAMEWORK&lt;span&gt;LangChain + an LLM Provider&lt;/span&gt;&lt;/div&gt;
   &lt;/div&gt;
   &lt;div class=&quot;vec-motif&quot;&gt;
     &lt;svg viewBox=&quot;0 0 820 150&quot; width=&quot;100%&quot; height=&quot;150&quot;&gt;
@@ -395,8 +395,8 @@ text_splitter = CharacterTextSplitter(chunk_size=&lt;span class=&quot;fn&quot;&g
 texts = text_splitter.split_documents(documents)
 print(len(texts))&lt;/div&gt;
 
-  &lt;h3&gt;3 · Set up the LLM (watsonx.ai)&lt;/h3&gt;
-  &lt;div class=&quot;code-block&quot;&gt;model_id = &lt;span class=&quot;st&quot;&gt;&#x27;mistralai/mistral-small-3-1-24b-instruct-2503&#x27;&lt;/span&gt;
+  &lt;h3&gt;3 · Set up the LLM&lt;/h3&gt;
+  &lt;div class=&quot;code-block&quot;&gt;model_id = &lt;span class=&quot;st&quot;&gt;&#x27;your-provider/your-llm-model&#x27;&lt;/span&gt;
 
 parameters = {
     GenParams.DECODING_METHOD: DecodingMethods.GREEDY,
@@ -407,13 +407,13 @@ parameters = {
 model = Model(
     model_id=model_id,
     params=parameters,
-    credentials={&lt;span class=&quot;st&quot;&gt;&quot;url&quot;&lt;/span&gt;: &lt;span class=&quot;st&quot;&gt;&quot;https://us-south.ml.cloud.ibm.com&quot;&lt;/span&gt;},
-    project_id=&lt;span class=&quot;st&quot;&gt;&quot;skills-network&quot;&lt;/span&gt;
+    credentials={&lt;span class=&quot;st&quot;&gt;&quot;url&quot;&lt;/span&gt;: &lt;span class=&quot;st&quot;&gt;&quot;https://your-llm-provider.example.com&quot;&lt;/span&gt;},
+    project_id=&lt;span class=&quot;st&quot;&gt;&quot;your-project-id&quot;&lt;/span&gt;
 )&lt;/div&gt;
 
   &lt;h3&gt;4 · Basic retrieval QA&lt;/h3&gt;
   &lt;div class=&quot;code-block&quot;&gt;qa = RetrievalQA.from_chain_type(
-    llm=flan_ul2_llm,
+    llm=chat_llm,
     chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
     retriever=docsearch.as_retriever(),
     return_source_documents=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;
@@ -435,7 +435,7 @@ PROMPT = PromptTemplate(template=prompt_template, input_variables=[&lt;span clas
 chain_type_kwargs = {&lt;span class=&quot;st&quot;&gt;&quot;prompt&quot;&lt;/span&gt;: PROMPT}
 
 qa = RetrievalQA.from_chain_type(
-    llm=llama_3_llm,
+    llm=chat_llm,
     chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
     retriever=docsearch.as_retriever(),
     chain_type_kwargs=chain_type_kwargs,
@@ -448,7 +448,7 @@ qa.invoke(&lt;span class=&quot;st&quot;&gt;&quot;Can I eat in company vehicles?&
   &lt;div class=&quot;code-block&quot;&gt;memory = ConversationBufferMemory(memory_key=&lt;span class=&quot;st&quot;&gt;&quot;chat_history&quot;&lt;/span&gt;, return_message=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;)
 
 qa = ConversationalRetrievalChain.from_llm(
-    llm=llama_3_llm,
+    llm=chat_llm,
     chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
     retriever=docsearch.as_retriever(),
     memory=memory,
@@ -468,7 +468,7 @@ print(result[&lt;span class=&quot;st&quot;&gt;&quot;answer&quot;&lt;/span&gt;])&
   &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;qa_loop&lt;/span&gt;():
     memory = ConversationBufferMemory(memory_key=&lt;span class=&quot;st&quot;&gt;&quot;chat_history&quot;&lt;/span&gt;, return_message=&lt;span class=&quot;kw&quot;&gt;True&lt;/span&gt;)
     qa = ConversationalRetrievalChain.from_llm(
-        llm=llama_3_llm, chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
+        llm=chat_llm, chain_type=&lt;span class=&quot;st&quot;&gt;&quot;stuff&quot;&lt;/span&gt;,
         retriever=docsearch.as_retriever(), memory=memory,
         get_chat_history=&lt;span class=&quot;kw&quot;&gt;lambda&lt;/span&gt; h: h, return_source_documents=&lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;
     )
@@ -700,10 +700,10 @@ huggingface_hub==&lt;span class=&quot;fn&quot;&gt;0.23.0&lt;/span&gt; \
 fastapi==&lt;span class=&quot;fn&quot;&gt;0.112.2&lt;/span&gt; \
 starlette==&lt;span class=&quot;fn&quot;&gt;0.37.2&lt;/span&gt; \
 uvicorn==&lt;span class=&quot;fn&quot;&gt;0.30.6&lt;/span&gt; \
-ibm-watsonx-ai==&lt;span class=&quot;fn&quot;&gt;1.1.2&lt;/span&gt; \
+your-llm-provider-sdk==&lt;span class=&quot;fn&quot;&gt;1.1.2&lt;/span&gt; \
 langchain==&lt;span class=&quot;fn&quot;&gt;0.2.11&lt;/span&gt; \
 langchain-community==&lt;span class=&quot;fn&quot;&gt;0.2.10&lt;/span&gt; \
-langchain-ibm==&lt;span class=&quot;fn&quot;&gt;0.1.11&lt;/span&gt;&lt;/div&gt;
+langchain-your-provider==&lt;span class=&quot;fn&quot;&gt;0.1.11&lt;/span&gt;&lt;/div&gt;
 &lt;/section&gt;
 
 &lt;!-- ============ INTERFACE CORE ARGS ============ --&gt;
@@ -857,40 +857,40 @@ gr.Interface(
 
 &lt;!-- ============ GRADIO + LLM ============ --&gt;
 &lt;section&gt;
-  &lt;div class=&quot;sec-label&quot;&gt;07 — Gradio + watsonx.ai&lt;/div&gt;
+  &lt;div class=&quot;sec-label&quot;&gt;07 — Gradio + an LLM Provider&lt;/div&gt;
   &lt;h2&gt;Wrapping an LLM in a chat interface&lt;/h2&gt;
   &lt;p class=&quot;lede&quot;&gt;Same three-part pattern as any Gradio app: initialize the model, define the response function, build the interface.&lt;/p&gt;
 
-  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai.foundation_models &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; ModelInference
-&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai.metanames &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; GenTextParamsMetaNames &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; GenParams
-&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; Credentials
-&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain_ibm &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; WatsonxLLM
+  &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; your_llm_library.foundation_models &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; ModelInference
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; your_llm_library.metanames &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; GenTextParamsMetaNames &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; GenParams
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; your_llm_library &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; Credentials
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; langchain_your_provider &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; LLMProvider
 &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; gradio &lt;span class=&quot;kw&quot;&gt;as&lt;/span&gt; gr
 
-model_id = &lt;span class=&quot;st&quot;&gt;&#x27;mistralai/mistral-medium-2505&#x27;&lt;/span&gt;
+model_id = &lt;span class=&quot;st&quot;&gt;&#x27;your-provider/your-llm-model&#x27;&lt;/span&gt;
 
 parameters = {
     GenParams.MAX_NEW_TOKENS: &lt;span class=&quot;fn&quot;&gt;256&lt;/span&gt;,
     GenParams.TEMPERATURE: &lt;span class=&quot;fn&quot;&gt;0.5&lt;/span&gt;,
 }
 
-project_id = &lt;span class=&quot;st&quot;&gt;&quot;skills-network&quot;&lt;/span&gt;
+project_id = &lt;span class=&quot;st&quot;&gt;&quot;your-project-id&quot;&lt;/span&gt;
 
-watsonx_llm = WatsonxLLM(
+llm = LLMProvider(
     model_id=model_id,
-    url=&lt;span class=&quot;st&quot;&gt;&quot;https://us-south.ml.cloud.ibm.com&quot;&lt;/span&gt;,
+    url=&lt;span class=&quot;st&quot;&gt;&quot;https://your-llm-provider.example.com&quot;&lt;/span&gt;,
     project_id=project_id,
     params=parameters,
 )
 
 &lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;generate_response&lt;/span&gt;(prompt_txt):
-    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; watsonx_llm.invoke(prompt_txt)
+    &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; llm.invoke(prompt_txt)
 
 chat_application = gr.Interface(
     fn=generate_response,
     inputs=gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Input&quot;&lt;/span&gt;, lines=&lt;span class=&quot;fn&quot;&gt;2&lt;/span&gt;, placeholder=&lt;span class=&quot;st&quot;&gt;&quot;Type your question here...&quot;&lt;/span&gt;),
     outputs=gr.Textbox(label=&lt;span class=&quot;st&quot;&gt;&quot;Output&quot;&lt;/span&gt;),
-    title=&lt;span class=&quot;st&quot;&gt;&quot;Watsonx.ai Chatbot&quot;&lt;/span&gt;,
+    title=&lt;span class=&quot;st&quot;&gt;&quot;LLM Chatbot&quot;&lt;/span&gt;,
     description=&lt;span class=&quot;st&quot;&gt;&quot;Ask any question and the chatbot will try to answer.&quot;&lt;/span&gt;
 )
 chat_application.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;, server_port=&lt;span class=&quot;fn&quot;&gt;7860&lt;/span&gt;)&lt;/div&gt;
@@ -1018,7 +1018,7 @@ chat_application.launch(server_name=&lt;span class=&quot;st&quot;&gt;&quot;127.0
   &lt;h1 class=&quot;title&quot;&gt;LlamaIndex &amp;amp;&lt;br&gt;the Icebreaker Bot&lt;/h1&gt;
   &lt;div class=&quot;subtitle&quot;&gt;Module 3 field notes — LlamaIndex&#x27;s take on RAG, how it stacks up against LangChain, and a guided build of a LinkedIn-profile chatbot.&lt;/div&gt;
   &lt;div class=&quot;meta-row&quot;&gt;
-    &lt;div&gt;FRAMEWORK&lt;span&gt;LlamaIndex + watsonx.ai&lt;/span&gt;&lt;/div&gt;
+    &lt;div&gt;FRAMEWORK&lt;span&gt;LlamaIndex + an LLM Provider&lt;/span&gt;&lt;/div&gt;
     &lt;div&gt;PROJECT&lt;span&gt;LinkedIn Icebreaker Bot&lt;/span&gt;&lt;/div&gt;
     &lt;div&gt;INTERFACE&lt;span&gt;CLI + Gradio&lt;/span&gt;&lt;/div&gt;
   &lt;/div&gt;
@@ -1191,7 +1191,7 @@ response = query_engine.query(&lt;span class=&quot;st&quot;&gt;&quot;What did th
 &lt;section&gt;
   &lt;div class=&quot;sec-label&quot;&gt;06 — Project&lt;/div&gt;
   &lt;h2&gt;Building the LinkedIn Icebreaker Bot&lt;/h2&gt;
-  &lt;p class=&quot;lede&quot;&gt;A RAG-powered tool that takes a LinkedIn profile and generates personalized conversation starters — built on LlamaIndex + IBM watsonx.&lt;/p&gt;
+  &lt;p class=&quot;lede&quot;&gt;A RAG-powered tool that takes a LinkedIn profile and generates personalized conversation starters — built on LlamaIndex and an LLM provider of your choice.&lt;/p&gt;
   &lt;ul class=&quot;points&quot;&gt;
     &lt;li&gt;Extracts profile data (mock JSON, or the ProxyCurl API for real profiles).&lt;/li&gt;
     &lt;li&gt;Splits it into nodes, embeds them, and stores them in a vector index.&lt;/li&gt;
@@ -1211,13 +1211,13 @@ response = query_engine.query(&lt;span class=&quot;st&quot;&gt;&quot;What did th
     &lt;p class=&quot;purpose&quot;&gt;Central place for every constant the app needs — model IDs, API settings, generation parameters, and the two prompt templates. Every other module imports from here instead of hardcoding values.&lt;/p&gt;
     &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;Configuration settings for the Icebreaker Bot.&quot;&quot;&quot;&lt;/span&gt;
 
-&lt;span class=&quot;cm&quot;&gt;# IBM watsonx.ai settings&lt;/span&gt;
-WATSONX_URL = &lt;span class=&quot;st&quot;&gt;&quot;https://us-south.ml.cloud.ibm.com&quot;&lt;/span&gt;
-WATSONX_PROJECT_ID = &lt;span class=&quot;st&quot;&gt;&quot;skills-network&quot;&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;# LLM provider settings&lt;/span&gt;
+LLM_API_URL = &lt;span class=&quot;st&quot;&gt;&quot;https://your-llm-provider.example.com&quot;&lt;/span&gt;
+LLM_PROJECT_ID = &lt;span class=&quot;st&quot;&gt;&quot;your-project-id&quot;&lt;/span&gt;
 
 &lt;span class=&quot;cm&quot;&gt;# Model settings&lt;/span&gt;
-LLM_MODEL_ID = &lt;span class=&quot;st&quot;&gt;&quot;ibm/granite-4-h-small&quot;&lt;/span&gt;
-EMBEDDING_MODEL_ID = &lt;span class=&quot;st&quot;&gt;&quot;ibm/slate-125m-english-rtrvr-v2&quot;&lt;/span&gt;
+LLM_MODEL_ID = &lt;span class=&quot;st&quot;&gt;&quot;your-provider/your-llm-model&quot;&lt;/span&gt;
+EMBEDDING_MODEL_ID = &lt;span class=&quot;st&quot;&gt;&quot;your-provider/your-embedding-model&quot;&lt;/span&gt;
 
 &lt;span class=&quot;cm&quot;&gt;# ProxyCurl API settings&lt;/span&gt;
 PROXYCURL_API_KEY = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&lt;/span&gt;  &lt;span class=&quot;cm&quot;&gt;# Replace with your API key&lt;/span&gt;
@@ -1258,7 +1258,7 @@ USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{
     &lt;p class=&quot;purpose&quot;&gt;Covers RAG stages 2–3: turning raw profile JSON into Nodes, then into a queryable vector index.&lt;/p&gt;
     &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; Document, VectorStoreIndex
 &lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core.node_parser &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; SentenceSplitter
-&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; modules.llm_interface &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; create_watsonx_embedding
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; modules.llm_interface &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; create_llm_embedding
 &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; config
 
 &lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;split_profile_data&lt;/span&gt;(profile_data):
@@ -1271,7 +1271,7 @@ USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{
 
 &lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_vector_database&lt;/span&gt;(nodes):
     &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;# 1. Get the embedding model using create_watsonx_embedding()&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Get the embedding model using create_llm_embedding()&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 2. Create a VectorStoreIndex from the nodes&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 3. Return the index&lt;/span&gt;
     &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;None&lt;/span&gt;
@@ -1285,7 +1285,7 @@ USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{
     &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;False&lt;/span&gt;&lt;/div&gt;
     &lt;ul class=&quot;whystep&quot;&gt;
       &lt;li&gt;&lt;b&gt;split_profile_data&lt;/b&gt; — the whole profile (JSON) becomes one &lt;code class=&quot;inline&quot;&gt;Document&lt;/code&gt;, then &lt;code class=&quot;inline&quot;&gt;SentenceSplitter&lt;/code&gt; (using &lt;code class=&quot;inline&quot;&gt;config.CHUNK_SIZE&lt;/code&gt;) breaks it into Nodes small enough for precise retrieval.&lt;/li&gt;
-      &lt;li&gt;&lt;b&gt;create_vector_database&lt;/b&gt; — wraps the nodes in a &lt;code class=&quot;inline&quot;&gt;VectorStoreIndex&lt;/code&gt; using the watsonx embedding model, so the profile becomes searchable by meaning, not just keywords.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;create_vector_database&lt;/b&gt; — wraps the nodes in a &lt;code class=&quot;inline&quot;&gt;VectorStoreIndex&lt;/code&gt; using the configured embedding model, so the profile becomes searchable by meaning, not just keywords.&lt;/li&gt;
       &lt;li&gt;&lt;b&gt;verify_embeddings&lt;/b&gt; — a sanity check: confirms every node actually got a vector before the app trusts the index for retrieval.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/div&gt;
@@ -1293,20 +1293,20 @@ USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{
   &lt;!-- FILE 4 --&gt;
   &lt;div class=&quot;filecard&quot;&gt;
     &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;modules/llm_interface.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Model Setup&lt;/span&gt;&lt;/div&gt;
-    &lt;p class=&quot;purpose&quot;&gt;Wraps IBM watsonx model creation so the rest of the app never has to touch credentials or SDK details directly.&lt;/p&gt;
-    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.embeddings.ibm &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; WatsonxEmbeddings
-&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.llms.ibm &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; WatsonxLLM
-&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; ibm_watsonx_ai.foundation_models.utils.enums &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; DecodingMethods
+    &lt;p class=&quot;purpose&quot;&gt;Wraps the LLM provider&#x27;s model creation so the rest of the app never has to touch credentials or SDK details directly.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.embeddings.your_provider &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; EmbeddingProvider
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.llms.your_provider &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; LLMProvider
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; your_llm_library.utils.enums &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; DecodingMethods
 &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; config
 
-&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_watsonx_embedding&lt;/span&gt;():
-    &lt;span class=&quot;cm&quot;&gt;# TODO: Create and return a WatsonxEmbeddings model using config values&lt;/span&gt;
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_llm_embedding&lt;/span&gt;():
+    &lt;span class=&quot;cm&quot;&gt;# TODO: Create and return an embedding model using config values&lt;/span&gt;
     &lt;span class=&quot;kw&quot;&gt;pass&lt;/span&gt;
 
-&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_watsonx_llm&lt;/span&gt;(temperature=&lt;span class=&quot;fn&quot;&gt;0.0&lt;/span&gt;, max_new_tokens=&lt;span class=&quot;fn&quot;&gt;500&lt;/span&gt;, decoding_method=&lt;span class=&quot;st&quot;&gt;&quot;sample&quot;&lt;/span&gt;):
+&lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;create_llm&lt;/span&gt;(temperature=&lt;span class=&quot;fn&quot;&gt;0.0&lt;/span&gt;, max_new_tokens=&lt;span class=&quot;fn&quot;&gt;500&lt;/span&gt;, decoding_method=&lt;span class=&quot;st&quot;&gt;&quot;sample&quot;&lt;/span&gt;):
     &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 1. Define additional parameters for the LLM&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;# 2. Create and return a WatsonxLLM model using config values and parameters&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 2. Create and return an LLM using config values and parameters&lt;/span&gt;
     &lt;span class=&quot;kw&quot;&gt;pass&lt;/span&gt;
 
 &lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;change_llm_model&lt;/span&gt;(new_model_id):
@@ -1315,8 +1315,8 @@ USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{
     &lt;span class=&quot;cm&quot;&gt;# 2. Log the change&lt;/span&gt;
     &lt;span class=&quot;kw&quot;&gt;pass&lt;/span&gt;&lt;/div&gt;
     &lt;ul class=&quot;whystep&quot;&gt;
-      &lt;li&gt;&lt;b&gt;create_watsonx_embedding&lt;/b&gt; — the embedding model used both when indexing the profile and when embedding user questions, so both vectors live in the same space.&lt;/li&gt;
-      &lt;li&gt;&lt;b&gt;create_watsonx_llm&lt;/b&gt; — the generation model, parameterized by temperature/token limits so callers can request &quot;deterministic facts&quot; vs. &quot;creative chat&quot; behavior.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;create_llm_embedding&lt;/b&gt; — the embedding model used both when indexing the profile and when embedding user questions, so both vectors live in the same space.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;create_llm&lt;/b&gt; — the generation model, parameterized by temperature/token limits so callers can request &quot;deterministic facts&quot; vs. &quot;creative chat&quot; behavior.&lt;/li&gt;
       &lt;li&gt;&lt;b&gt;change_llm_model&lt;/b&gt; — lets the Gradio UI&#x27;s model dropdown swap models at runtime without restarting the app.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/div&gt;
@@ -1326,12 +1326,12 @@ USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{
     &lt;div class=&quot;filecard-head&quot;&gt;&lt;span class=&quot;fname&quot;&gt;modules/query_engine.py&lt;/span&gt;&lt;span class=&quot;ftag&quot;&gt;Augmentation + Generation&lt;/span&gt;&lt;/div&gt;
     &lt;p class=&quot;purpose&quot;&gt;Covers the final RAG stages — combining retrieved context with a prompt template, then asking the LLM for a response.&lt;/p&gt;
     &lt;div class=&quot;code-block&quot;&gt;&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; llama_index.core &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; VectorStoreIndex, PromptTemplate
-&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; modules.llm_interface &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; create_watsonx_llm
+&lt;span class=&quot;kw&quot;&gt;from&lt;/span&gt; modules.llm_interface &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; create_llm
 &lt;span class=&quot;kw&quot;&gt;import&lt;/span&gt; config
 
 &lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;generate_initial_facts&lt;/span&gt;(index):
     &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;# 1. Create a Watsonx LLM for generating facts&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Create an LLM for generating facts&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 2. Create a prompt template for facts generation&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 3. Create a query engine with the LLM and prompt template&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 4. Execute the query to generate facts&lt;/span&gt;
@@ -1340,7 +1340,7 @@ USER_QUESTION_TEMPLATE = &lt;span class=&quot;st&quot;&gt;&quot;&quot;&quot;...{
 
 &lt;span class=&quot;kw&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;answer_user_query&lt;/span&gt;(index, user_query):
     &lt;span class=&quot;cm&quot;&gt;# TODO:&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;# 1. Create a Watsonx LLM for answering questions&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;# 1. Create an LLM for answering questions&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 2. Create a prompt template for question answering&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 3. Retrieve relevant nodes from the index&lt;/span&gt;
     &lt;span class=&quot;cm&quot;&gt;# 4. Build context string from retrieved nodes&lt;/span&gt;
